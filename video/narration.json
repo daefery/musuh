@@ -1,0 +1,142 @@
+{
+  "voice": "id-ID-ArdiNeural",
+  "rate": "+6%",
+  "lexicon": [
+    [
+      "Red Team",
+      "Red Tim"
+    ],
+    [
+      "Keris Woomera",
+      "Keris, Wumera"
+    ],
+    [
+      "TNI AD",
+      "Te En I A De"
+    ],
+    [
+      "TNI",
+      "Te En I"
+    ],
+    [
+      "EXCON",
+      "ekskon"
+    ],
+    [
+      "NO-GO",
+      "no go"
+    ],
+    [
+      "SigmaHQ",
+      "Sigma ha ki"
+    ],
+    [
+      "BSSN",
+      "Be Es Es En"
+    ],
+    [
+      "PDNS 2",
+      "Pe De En Es dua"
+    ],
+    [
+      "Modbus",
+      "mod bas"
+    ],
+    [
+      "MUSUH",
+      "Musuh"
+    ]
+  ],
+  "scenes": [
+    {
+      "id": "masalah",
+      "title": "Masalah",
+      "lines": [
+        "Latihan siber seperti Keris Woomera tahun 2026 butuh tiga tim.",
+        "Tim merah menyerang, tim biru bertahan, dan EXCON menilai GO atau NO-GO.",
+        "Karena butuh tiga tim, latihan seperti ini terikat pada acara besar."
+      ]
+    },
+    {
+      "id": "solusi",
+      "title": "MUSUH",
+      "lines": [
+        "Ini MUSUH, Mesin Uji Serangan dan Ketahanan.",
+        "MUSUH menggantikan tim merah dan EXCON, di satu laptop, tanpa internet."
+      ]
+    },
+    {
+      "id": "siapkan",
+      "title": "1 · Siapkan",
+      "lines": [
+        "Pelatih memilih skenario.",
+        "Skenarionya rekaan, tetapi setiap langkah musuh bersumber dari insiden publik.",
+        "Misalnya pola Red Team di Keris Woomera, kronologi BSSN atas PDNS 2, dan serangan jaringan listrik Ukraina.",
+        "Peserta mengisi nama, lalu latihan dimulai."
+      ]
+    },
+    {
+      "id": "operasi",
+      "title": "2 · Operasi",
+      "lines": [
+        "Peserta melihat apa yang dilihat petugas siber sungguhan: peta jaringan, peringatan, dan log.",
+        "Setiap peringatan berasal dari aturan deteksi SigmaHQ.",
+        "Server web membuka proksi ke alamat luar. Peserta memblokir alamat itu.",
+        "Sasaran tindakan selalu ditampilkan dulu, baru dijalankan."
+      ]
+    },
+    {
+      "id": "adaptasi",
+      "title": "MUSUH beradaptasi",
+      "lines": [
+        "Di layar pelatih terlihat pikiran MUSUH.",
+        "Jalurnya diputus, maka ia membuka terowongan cadangan ke alamat lain.",
+        "Musuh beradaptasi, tetapi adil: kode latihan dan tindakan yang sama selalu menghasilkan musuh yang sama."
+      ]
+    },
+    {
+      "id": "serahkan",
+      "title": "Serahkan konsol",
+      "lines": [
+        "Peserta memblokir terowongan itu dan menyatakan insiden.",
+        "Lalu konsol diserahkan. Sisa waktu tetap dijalankan, jadi tidak ada nilai GO karena berhenti lebih awal."
+      ]
+    },
+    {
+      "id": "evaluasi",
+      "title": "3 · Evaluasi",
+      "lines": [
+        "Evaluasi membuka semuanya: nilai, sasaran latihan, dan rantai serangan musuh.",
+        "Garis waktu menyandingkan langkah musuh dengan tindakan peserta.",
+        "Setiap langkah musuh bisa dibuka untuk melihat sumbernya."
+      ]
+    },
+    {
+      "id": "rapor",
+      "title": "4 · Rapor",
+      "lines": [
+        "Hasilnya adalah Rapor Prestasi Siber.",
+        "MUSUH memeriksanya dengan memutar ulang latihan dari awal. Rapor ini sah.",
+        "Bila berkas rapor diubah, misalnya nilainya dinaikkan menjadi 98, putar ulang langsung menunjukkan nilai aslinya.",
+        "Rapor itu tidak sah."
+      ]
+    },
+    {
+      "id": "genset",
+      "title": "Skenario listrik",
+      "lines": [
+        "Skenario lain menyerang pasokan listrik markas. MUSUH mematikan genset lewat Modbus.",
+        "Menyalakan genset ditolak, karena musuh masih bisa mematikannya lagi.",
+        "Setelah perintah tulis Modbus diblokir, genset menyala kembali."
+      ]
+    },
+    {
+      "id": "penutup",
+      "title": "Penutup",
+      "lines": [
+        "MUSUH. Satu program, tanpa internet, untuk setiap satuan.",
+        "Lawannya adil. Nilainya bisa diperiksa ulang."
+      ]
+    }
+  ]
+}

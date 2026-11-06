@@ -1,26 +1,18 @@
-# Naskah video presentasi (2 menit 22 detik)
+# Naskah video presentasi (2 menit 21 detik)
 
-Video tanpa suara dibuat otomatis: `node test/record.mjs` merekam program sungguhan, lalu `node test/video.mjs` menyusun `dist/video/MUSUH-demo.mp4`. Waktu tiap adegan dihitung dari panjang narasinya (sekitar 2,3 kata per detik). Fery membaca narasi sambil menonton video, lalu suara digabungkan.
-Panjang video yang diizinkan panitia belum diumumkan. Bila narasi diubah, jalankan ulang `node test/video.mjs` agar waktunya ikut menyesuaikan.
+Video lengkap dengan suara dan subtitle dibuat dari `video/` (lihat `video/README.md`). Naskah di bawah adalah narasi yang dibacakan, per adegan.
 
-| # | Detik | Layar | Narasi (Bahasa Indonesia) |
-|---|---|---|---|
-| 1 | 0:00-0:11 | Slide 1 (judul) | "Saya Fery. Ini MUSUH, Mesin Uji Serangan dan Ketahanan: lawan tanding siber untuk satuan TNI AD, di satu laptop, tanpa internet." |
-| 2 | 0:11-0:26 | Slide 2 (masalah) | "Latihan siber seperti Keris Woomera 2026 membutuhkan tim merah, tim biru, dan EXCON yang menilai GO atau NO-GO. Karena butuh tiga tim, latihan seperti ini terikat pada acara besar." |
-| 3 | 0:26-0:44 | Rekaman: SIAPKAN | "MUSUH menggantikan tim merah dan EXCON. Pelatih memilih skenario dan kode latihan. Skenarionya rekaan, tetapi setiap langkah musuh bersumber dari insiden publik: pola Red Team Keris Woomera, kronologi BSSN atas PDNS 2, dan serangan jaringan listrik Ukraina." |
-| 4 | 0:44-1:00 | Rekaman: OPERASI, peringatan pertama | "Peserta hanya melihat apa yang dilihat petugas siber sungguhan: peta jaringan, peringatan dari aturan deteksi, dan log. Saya memilih peringatan, lalu memblokir alamat proksi musuh. Setiap tindakan menampilkan sasarannya dulu sebelum dijalankan." |
-| 5 | 1:00-1:17 | Rekaman: tampilan pelatih, MUSUH beralih jalur | "Di layar pelatih terlihat pikiran MUSUH: jalurnya diputus, ia membuka terowongan cadangan. Musuh beradaptasi, tetapi adil: kode latihan yang sama dan tindakan yang sama selalu memberi musuh yang sama, jadi dua prajurit bisa dibandingkan." |
-| 6 | 1:17-1:29 | Rekaman: blokir kedua, serahkan konsol | "Saya memblokir terowongan itu dan menyerahkan konsol. Sisa waktu tetap dijalankan sampai skenario selesai, sehingga tidak ada nilai GO karena berhenti lebih awal." |
-| 7 | 1:29-1:45 | Rekaman: EVALUASI | "Evaluasi menampilkan nilai, sasaran GO atau NO-GO, rantai serangan musuh, dan garis waktu musuh lawan peserta. Setiap langkah musuh bisa dibuka untuk melihat sumbernya." |
-| 8 | 1:45-2:02 | Rekaman: RAPOR, verifikasi SAH lalu berkas yang diubah | "Rapor Prestasi Siber bisa diperiksa ulang. Konsol tidak bisa mengubah nilai. Bila berkas rapor diubah di luar MUSUH, misalnya nilainya jadi 98, MUSUH memutar ulang latihan dan langsung menunjukkan nilai aslinya: rapor tidak sah." |
-| 9 | 2:02-2:12 | Rekaman: skenario genset | "Skenario lain mencakup OT: musuh mematikan genset lewat Modbus, dan genset hanya bisa dinyalakan lagi setelah perintah tulis diblokir." |
-| 10 | 2:12-2:22 | Slide 10 (penutup) | "MUSUH: satu program, tanpa internet, bisa dipakai di setiap satuan. Lawannya adil, nilainya bisa diperiksa ulang. Terima kasih." |
+| Adegan | Narasi |
+|---|---|
+| Masalah | Latihan siber seperti Keris Woomera tahun 2026 butuh tiga tim. Tim merah menyerang, tim biru bertahan, dan EXCON menilai GO atau NO-GO. Karena butuh tiga tim, latihan seperti ini terikat pada acara besar. |
+| MUSUH | Ini MUSUH, Mesin Uji Serangan dan Ketahanan. MUSUH menggantikan tim merah dan EXCON, di satu laptop, tanpa internet. |
+| 1 · Siapkan | Pelatih memilih skenario. Skenarionya rekaan, tetapi setiap langkah musuh bersumber dari insiden publik. Misalnya pola Red Team di Keris Woomera, kronologi BSSN atas PDNS 2, dan serangan jaringan listrik Ukraina. Peserta mengisi nama, lalu latihan dimulai. |
+| 2 · Operasi | Peserta melihat apa yang dilihat petugas siber sungguhan: peta jaringan, peringatan, dan log. Setiap peringatan berasal dari aturan deteksi SigmaHQ. Server web membuka proksi ke alamat luar. Peserta memblokir alamat itu. Sasaran tindakan selalu ditampilkan dulu, baru dijalankan. |
+| MUSUH beradaptasi | Di layar pelatih terlihat pikiran MUSUH. Jalurnya diputus, maka ia membuka terowongan cadangan ke alamat lain. Musuh beradaptasi, tetapi adil: kode latihan dan tindakan yang sama selalu menghasilkan musuh yang sama. |
+| Serahkan konsol | Peserta memblokir terowongan itu dan menyatakan insiden. Lalu konsol diserahkan. Sisa waktu tetap dijalankan, jadi tidak ada nilai GO karena berhenti lebih awal. |
+| 3 · Evaluasi | Evaluasi membuka semuanya: nilai, sasaran latihan, dan rantai serangan musuh. Garis waktu menyandingkan langkah musuh dengan tindakan peserta. Setiap langkah musuh bisa dibuka untuk melihat sumbernya. |
+| 4 · Rapor | Hasilnya adalah Rapor Prestasi Siber. MUSUH memeriksanya dengan memutar ulang latihan dari awal. Rapor ini sah. Bila berkas rapor diubah, misalnya nilainya dinaikkan menjadi 98, putar ulang langsung menunjukkan nilai aslinya. Rapor itu tidak sah. |
+| Skenario listrik | Skenario lain menyerang pasokan listrik markas. MUSUH mematikan genset lewat Modbus. Menyalakan genset ditolak, karena musuh masih bisa mematikannya lagi. Setelah perintah tulis Modbus diblokir, genset menyala kembali. |
+| Penutup | MUSUH. Satu program, tanpa internet, untuk setiap satuan. Lawannya adil. Nilainya bisa diperiksa ulang. |
 
-Catatan:
-- Nama di rekaman: "Peserta Satu". Ganti bila ingin memakai nama sendiri (`NAMA=... node test/record.mjs`).
-- Batasan dinyatakan terbuka di `LIMITS.md`; video tidak mengklaim MUSUH sudah dipakai TNI.
-
-## Menggabungkan suara
-1. Putar `MUSUH-demo.mp4` dan rekam suara Anda membaca narasi (misalnya dengan Voice Recorder Windows atau ponsel), simpan sebagai `suara.m4a`.
-2. Gabungkan: `ffmpeg -i MUSUH-demo.mp4 -i suara.m4a -c:v copy -c:a aac -shortest MUSUH-video.mp4`
-3. Cara lain: buka video di Clipchamp (bawaan Windows 11), tekan rekam suara, lalu ekspor 1080p.
+Batasan dinyatakan terbuka di `LIMITS.md`; video tidak mengklaim MUSUH sudah dipakai TNI. Suara adalah suara sintetis (Microsoft Edge neural voice, id-ID-ArdiNeural).

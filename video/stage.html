@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8">
+<!-- MUSUH demo video stage. Rendered frame by frame by video/render.mjs: window.seek(t) draws time t.
+     Scene stills come from the real program (video/capture.mjs); this page only moves the camera,
+     draws highlights, callouts and subtitles over them. -->
+<style>
+@font-face { font-family: Roboto; font-weight: 400; src: url(../web/fonts/roboto-latin-400-normal.woff2); }
+@font-face { font-family: Roboto; font-weight: 500; src: url(../web/fonts/roboto-latin-500-normal.woff2); }
+@font-face { font-family: Roboto; font-weight: 700; src: url(../web/fonts/roboto-latin-700-normal.woff2); }
+@font-face { font-family: "Roboto Condensed"; font-weight: 700; src: url(../web/fonts/roboto-condensed-latin-700-normal.woff2); }
+@font-face { font-family: "Roboto Mono"; font-weight: 500; src: url(../web/fonts/roboto-mono-latin-500-normal.woff2); }
+:root { --gold: #d4a72c; --gold-2: #f0d27a; --olive: #4b5d2a; --olive-2: #6b803a; --base: #0d120b; --text: #ecefe2; --dim: #a3ad94; --red: #e5484d; --green: #46b85a; }
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: var(--base); color: var(--text); font-family: Roboto, sans-serif; }
+#cam { position: absolute; inset: 0; overflow: hidden; }
+.shot { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; will-change: transform, opacity; }
+.shot img { width: 1920px; height: 1080px; display: block; }
+.shot.tall img { height: auto; }
+.ring { position: absolute; border: 4px solid var(--gold); border-radius: 10px; box-shadow: 0 0 0 9999px rgba(5,8,4,.55), 0 0 24px rgba(240,210,122,.6); pointer-events: none; }
+.ring.nodim { box-shadow: 0 0 24px rgba(240,210,122,.7); }
+.ring.red { border-color: var(--red); box-shadow: 0 0 0 9999px rgba(5,8,4,.55), 0 0 24px rgba(229,72,77,.6); }
+.ring.green { border-color: var(--green); box-shadow: 0 0 0 9999px rgba(5,8,4,.55), 0 0 24px rgba(70,184,90,.6); }
+.call { position: absolute; max-width: 560px; background: rgba(18,26,15,.96); border: 2px solid var(--gold); border-left-width: 8px; border-radius: 8px; padding: 14px 20px; font: 600 30px/1.25 Roboto; box-shadow: 0 10px 40px rgba(0,0,0,.6); }
+.call small { display: block; font: 700 18px/1.2 "Roboto Condensed"; letter-spacing: .12em; text-transform: uppercase; color: var(--gold-2); margin-bottom: 6px; }
+.call.red { border-color: var(--red); } .call.red small { color: #ff8a8d; }
+.call.green { border-color: var(--green); } .call.green small { color: #8fe09c; }
+.cursor { position: absolute; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; border: 4px solid var(--gold-2); background: rgba(240,210,122,.25); }
+.cursor.click::after { content: ""; position: absolute; inset: -18px; border-radius: 50%; border: 4px solid var(--gold-2); opacity: var(--p); transform: scale(calc(1.6 - var(--p) * .6)); }
+#chrome { position: absolute; inset: 0; pointer-events: none; }
+#chip { position: absolute; left: 36px; top: 30px; display: flex; align-items: center; gap: 14px; background: rgba(13,18,11,.92); border: 1px solid var(--olive-2); border-radius: 6px; padding: 10px 18px 10px 12px; font: 700 26px/1 "Roboto Condensed"; letter-spacing: .1em; text-transform: uppercase; color: var(--gold-2); }
+#chip b { background: var(--gold); color: #1a1405; border-radius: 4px; padding: 6px 10px; font-size: 20px; }
+#sub { position: absolute; left: 0; right: 0; margin: 0 auto; width: fit-content; bottom: 56px; max-width: 1560px; text-align: center; font: 500 40px/1.3 Roboto; color: #fff; background: rgba(8,11,7,.86); padding: 14px 32px; border-radius: 10px; text-wrap: balance; }
+#sub:empty { display: none; }
+#bar { position: absolute; left: 0; bottom: 0; height: 8px; background: linear-gradient(90deg, var(--merah, #d0342c) 0 50%, #f6f5ef 50%); }
+#bar i { position: absolute; inset: 0; background: var(--gold); }
+#steps { position: absolute; right: 48px; top: 40px; display: flex; gap: 8px; }
+#steps span { font: 700 18px/1 "Roboto Condensed"; letter-spacing: .1em; padding: 10px 14px; border-radius: 4px; background: rgba(13,18,11,.85); color: var(--dim); border: 1px solid #2f3c28; }
+#steps span.on { color: #1a1405; background: var(--gold); border-color: var(--gold); }
+#steps span.done { color: var(--gold-2); border-color: var(--olive-2); }
+/* cards */
+.card { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 0 160px; background: radial-gradient(ellipse at 70% 40%, #1b2614, #0b0f09 70%); }
+.card::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 10px; background: linear-gradient(90deg, #d0342c 50%, #f6f5ef 50%); }
+.eyebrow { font: 700 28px/1 "Roboto Condensed"; letter-spacing: .2em; color: var(--gold); text-transform: uppercase; }
+.big { font: 700 150px/1 "Roboto Condensed"; letter-spacing: .14em; color: var(--gold); margin: 26px 0 16px; }
+.h1 { font: 700 72px/1.1 "Roboto Condensed"; color: #fff; }
+.lead { font: 400 40px/1.4 Roboto; color: var(--text); max-width: 1300px; margin-top: 24px; }
+.src { position: absolute; left: 160px; bottom: 18px; font: 400 20px/1.3 Roboto; color: var(--dim); max-width: 1500px; }
+.teams { display: flex; gap: 40px; margin-top: 64px; }
+.team { width: 440px; border-radius: 14px; padding: 34px; background: #151c12; border: 2px solid #2f3c28; }
+.team svg { width: 64px; height: 64px; }
+.team h3 { font: 700 44px/1 "Roboto Condensed"; margin: 20px 0 10px; letter-spacing: .04em; }
+.team p { font: 400 26px/1.35 Roboto; color: var(--dim); margin: 0; }
+.team.red { border-color: #6b2422; } .team.red h3 { color: #ff8a8d; }
+.team.blue { border-color: #22506b; } .team.blue h3 { color: #8cc8ff; }
+.team.ex { border-color: #6b5a22; } .team.ex h3 { color: var(--gold-2); }
+.team.gone { position: relative; }
+.team .x { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+.team .x span { font: 700 40px/1 "Roboto Condensed"; letter-spacing: .1em; color: #1a1405; background: var(--gold); padding: 14px 22px; border-radius: 8px; transform: rotate(-6deg); box-shadow: 0 10px 30px rgba(0,0,0,.5); }
+.pills { display: flex; gap: 22px; margin-top: 56px; flex-wrap: wrap; }
+.pill { display: flex; gap: 14px; align-items: center; font: 500 34px/1 Roboto; padding: 20px 28px; border: 2px solid var(--olive-2); border-radius: 999px; background: #151c12; }
+.pill svg { width: 40px; height: 40px; color: var(--gold); }
+.zoombox { position: absolute; border: 3px solid var(--gold); border-radius: 12px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.7); background: var(--base); }
+.zoombox img { position: absolute; transform-origin: 0 0; }
+.vs { position: absolute; display: flex; align-items: center; gap: 24px; font: 700 64px/1 "Roboto Mono"; }
+.stamp { position: absolute; font: 700 92px/1 "Roboto Condensed"; letter-spacing: .08em; padding: 18px 40px; border: 8px solid; border-radius: 14px; transform: rotate(-8deg); background: rgba(13,18,11,.85); }
+.stamp.ok { color: var(--green); border-color: var(--green); } .stamp.bad { color: var(--red); border-color: var(--red); }
+</style></head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2 20 5v6c0 5-3.4 9.4-8 11-4.6-1.6-8-6-8-11V5z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="i-sword" viewBox="0 0 24 24"><path d="M14.5 17.5 3 6V3h3l11.5 11.5M13 19l6-6M16 16l4 4M19 21l2-2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-clip" viewBox="0 0 24 24"><path d="M9 4h6v3H9zM7 5H5v16h14V5h-2M8 12l3 3 5-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-laptop" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M2 19h20" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="i-wifi-off" viewBox="0 0 24 24"><path d="M2 2l20 20M8.5 16.5a5 5 0 0 1 7 0M5 13a10 10 0 0 1 5.2-2.8M19 13a10 10 0 0 0-2.5-1.8M2 8.8a15 15 0 0 1 4.2-2.7M22 8.8A15 15 0 0 0 10.7 5M12 20h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M7 21h10M5 7h14M5 7l-3 7a3 3 0 0 0 6 0zM19 7l-3 7a3 3 0 0 0 6 0z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="i-seal" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 14.5 7 22l5-3 5 3-2-7.5M9.5 9l1.8 1.8L15 7" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+</svg>
+<div id="cam"></div>
+<div id="chrome"><div id="chip"></div><div id="steps"></div><div id="sub"></div><div id="bar"><i></i></div></div>
+<script src="out/plan.js"></script>
+<script src="stage.js"></script>
+</body></html>
