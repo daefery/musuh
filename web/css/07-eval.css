@@ -1,0 +1,41 @@
+/* EVALUASI: verdict + objectives + score | swimlane replay MUSUH vs PESERTA on one time axis. */
+.eval { display: grid; grid-template-columns: minmax(22rem, 0.9fr) minmax(0, 1.6fr); gap: 1rem; max-width: 1600px; margin: 0 auto; }
+.verdict { display: flex; align-items: center; gap: 1.25rem; padding: 1rem; background: var(--base); border: 1px solid var(--line); border-radius: var(--r); }
+.verdict .v { font-size: 2.5rem; font-weight: 700; letter-spacing: 0.04em; display: flex; align-items: center; gap: 0.75rem; }
+.verdict .v .st { width: 1.75rem; height: 1.75rem; }
+.verdict .total { font: 500 2.25rem var(--mono); }
+.verdict .total small { font-size: 1rem; color: var(--text-3); }
+.parts { display: grid; gap: 0.5rem; margin-top: 0.75rem; }
+.part { display: grid; grid-template-columns: 8rem 1fr 3.5rem; gap: 0.5rem; align-items: center; font-size: 0.8125rem; }
+.part .bar { height: 0.5rem; background: var(--base); border-radius: 2px; overflow: hidden; border: 1px solid var(--line); }
+.part .bar i { display: block; height: 100%; background: var(--gold); }
+.part .n { grid-column: 2 / -1; color: var(--text-3); font-size: 0.75rem; margin-top: -0.25rem; }
+.part .v { font-family: var(--mono); text-align: right; }
+.obj { display: grid; grid-template-columns: 1.25rem 1fr auto; gap: 0.5rem; padding: 0.5rem 0; border-bottom: 1px solid var(--line); font-size: 0.875rem; }
+.obj .note { color: var(--text-3); font-size: 0.75rem; }
+.obj .res { font-weight: 700; letter-spacing: 0.04em; }
+.obj .res.go { color: var(--normal); } .obj .res.nogo { color: var(--critical); }
+.lanes { position: relative; }
+.lanes .axis { display: grid; grid-template-columns: 4.5rem 1fr 1fr; gap: 0.5rem; font-size: 0.6875rem; letter-spacing: 0.1em; color: var(--text-3); text-transform: uppercase; padding: 0 0 0.375rem; border-bottom: 1px solid var(--line-strong); position: sticky; top: 0; background: var(--surface); }
+.lane { display: grid; grid-template-columns: 4.5rem 1fr 1fr; gap: 0.5rem; padding: 0.375rem 0; border-bottom: 1px solid var(--line); font-size: 0.875rem; }
+.lane > button.open { grid-column: 1 / -1; display: grid; grid-template-columns: 4.5rem 1fr 1fr; gap: 0.5rem; width: 100%; text-align: left;
+  background: none; border: 0; padding: 0; margin: 0; color: inherit; font: inherit; cursor: pointer; }
+.lane > button.open:disabled { cursor: default; }
+.lane > button.open:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.lane:hover { background: var(--base-hover); }
+.lane[aria-expanded="true"] { background: var(--surface-selected); }
+.lane .t { font: 0.75rem var(--mono); color: var(--text-3); }
+.lane .red { display: flex; gap: 0.375rem; align-items: flex-start; }
+.lane .red.fail { color: var(--text-2); }
+.lane .blue { color: #c9e08f; }
+.lane .ev { grid-column: 2 / -1; font-size: 0.75rem; color: var(--text-2); background: var(--base); border: 1px solid var(--line); border-radius: var(--r); padding: 0.5rem; display: none; }
+.lane[aria-expanded="true"] .ev { display: block; }
+.lane .ev a { color: var(--interactive); }
+.lesson { padding: 0.5rem 0; border-bottom: 1px solid var(--line); font-size: 0.8125rem; }
+.lesson b { font-weight: 500; }
+.gapnote { color: var(--serious); }
+.board table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.board th { text-align: left; font-size: 0.6875rem; letter-spacing: 0.1em; color: var(--text-3); font-weight: 500; text-transform: uppercase; padding: 0.375rem; border-bottom: 1px solid var(--line-strong); }
+.board td { padding: 0.5rem 0.375rem; border-bottom: 1px solid var(--line); }
+.board tr.me td { background: var(--surface-selected); }
+@media (max-width: 1023px) { .eval { grid-template-columns: 1fr; } }

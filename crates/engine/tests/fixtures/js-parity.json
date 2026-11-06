@@ -1,0 +1,1160 @@
+[
+ {
+  "scenario": "domain-takeover",
+  "code": "MSH-0001",
+  "actions": [],
+  "timeline": [
+   [
+    0,
+    "sys",
+    "Gladi dimulai. Kode latihan MSH-0001. Skenario: Pengambilalihan direktori jaringan markas"
+   ],
+   [
+    12,
+    "red",
+    "MUSUH: Celah aplikasi web dieksploitasi, web shell ditanam di WEB-01 (T1505.003, Persistence)"
+   ],
+   [
+    12,
+    "alert",
+    "Peringatan S02 \"Web shell dibuat di folder situs\" (medium) di WEB-01"
+   ],
+   [
+    12,
+    "alert",
+    "Peringatan S01 \"Proses mencurigakan dari server web\" (high) di WEB-01"
+   ],
+   [
+    35,
+    "red",
+    "MUSUH: Proksi internal dengan netsh portproxy ke 198.51.100.23 (T1090.001, Command and Control)"
+   ],
+   [
+    35,
+    "alert",
+    "Peringatan S03 \"Aturan port forwarding baru lewat netsh\" (medium) di WEB-01"
+   ],
+   [
+    74,
+    "red",
+    "MUSUH: Enumerasi grup Domain Admins dari web shell (T1069.002, Discovery)"
+   ],
+   [
+    74,
+    "alert",
+    "Peringatan S01 \"Proses mencurigakan dari server web\" (high) di WEB-01"
+   ],
+   [
+    74,
+    "alert",
+    "Peringatan S05 \"Pengintaian grup dan akun dengan net.exe\" (medium) di WEB-01"
+   ],
+   [
+    111,
+    "red",
+    "MUSUH: Akses memori LSASS di WEB-01 (T1003.001, Credential Access)"
+   ],
+   [
+    111,
+    "alert",
+    "Peringatan S06 \"Potensi pencurian kredensial dari LSASS\" (medium) di WEB-01"
+   ],
+   [
+    154,
+    "red",
+    "MUSUH: SMB ke FS-01 dengan hash svc.backup (T1021.002, Lateral Movement)"
+   ],
+   [
+    154,
+    "alert",
+    "Peringatan S09 \"Indikasi pass-the-hash\" (medium) di FS-01"
+   ],
+   [
+    194,
+    "red",
+    "MUSUH: RDP ke DC-01 dengan akun admin domain (T1021.001, Lateral Movement)"
+   ],
+   [
+    194,
+    "alert",
+    "Peringatan S10 \"Logon jarak jauh (RDP) akun admin\" (low) di DC-01"
+   ],
+   [
+    229,
+    "red",
+    "MUSUH: ntdsutil membuat salinan ntds.dit di DC-01 (T1003.003, Credential Access)"
+   ],
+   [
+    229,
+    "alert",
+    "Peringatan S12 \"Penggunaan ntdsutil yang mencurigakan\" (medium) di DC-01"
+   ],
+   [
+    255,
+    "red",
+    "MUSUH: Menghapus log Security di WEB-01 (T1685.005, Defense Evasion)"
+   ],
+   [
+    255,
+    "alert",
+    "Peringatan S13 \"Log event dihapus atau diubah\" (high) di WEB-01"
+   ],
+   [
+    275,
+    "sys",
+    "Gladi selesai: Waktu latihan habis"
+   ]
+  ],
+  "total": 10,
+  "verdict": "NO-GO",
+  "parts": [
+   0,
+   0,
+   0,
+   10
+  ],
+  "objectives": [
+   false,
+   false,
+   false,
+   false
+  ]
+ },
+ {
+  "scenario": "domain-takeover",
+  "code": "MSH-7Q2K",
+  "actions": [
+   [
+    40,
+    "incident",
+    null
+   ],
+   [
+    45,
+    "block",
+    "198.51.100.23"
+   ],
+   [
+    130,
+    "reset",
+    "admin.server"
+   ]
+  ],
+  "timeline": [
+   [
+    0,
+    "sys",
+    "Gladi dimulai. Kode latihan MSH-7Q2K. Skenario: Pengambilalihan direktori jaringan markas"
+   ],
+   [
+    12,
+    "red",
+    "MUSUH: Celah aplikasi web dieksploitasi, web shell ditanam di WEB-01 (T1505.003, Persistence)"
+   ],
+   [
+    12,
+    "alert",
+    "Peringatan S02 \"Web shell dibuat di folder situs\" (medium) di WEB-01"
+   ],
+   [
+    12,
+    "alert",
+    "Peringatan S01 \"Proses mencurigakan dari server web\" (high) di WEB-01"
+   ],
+   [
+    36,
+    "red",
+    "MUSUH: Proksi internal dengan netsh portproxy ke 198.51.100.23 (T1090.001, Command and Control)"
+   ],
+   [
+    36,
+    "alert",
+    "Peringatan S03 \"Aturan port forwarding baru lewat netsh\" (medium) di WEB-01"
+   ],
+   [
+    40,
+    "blue",
+    "Peserta menyatakan INSIDEN"
+   ],
+   [
+    45,
+    "blue",
+    "Peserta memblokir IP 198.51.100.23 di firewall"
+   ],
+   [
+    55,
+    "red",
+    "MUSUH: Terowongan cadangan (Chisel) ke 203.0.113.45 (T1572, Command and Control)"
+   ],
+   [
+    55,
+    "alert",
+    "Peringatan S04 \"Alat terowongan Chisel dijalankan\" (high) di WEB-01"
+   ],
+   [
+    72,
+    "red",
+    "MUSUH: Enumerasi grup Domain Admins dari web shell (T1069.002, Discovery)"
+   ],
+   [
+    72,
+    "alert",
+    "Peringatan S01 \"Proses mencurigakan dari server web\" (high) di WEB-01"
+   ],
+   [
+    72,
+    "alert",
+    "Peringatan S05 \"Pengintaian grup dan akun dengan net.exe\" (medium) di WEB-01"
+   ],
+   [
+    112,
+    "red",
+    "MUSUH: Akses memori LSASS di WEB-01 (T1003.001, Credential Access)"
+   ],
+   [
+    112,
+    "alert",
+    "Peringatan S06 \"Potensi pencurian kredensial dari LSASS\" (medium) di WEB-01"
+   ],
+   [
+    130,
+    "blue",
+    "Peserta mereset kredensial akun admin.server"
+   ],
+   [
+    154,
+    "red",
+    "MUSUH: SMB ke FS-01 dengan hash svc.backup (T1021.002, Lateral Movement)"
+   ],
+   [
+    154,
+    "alert",
+    "Peringatan S09 \"Indikasi pass-the-hash\" (medium) di FS-01"
+   ],
+   [
+    194,
+    "red-blocked",
+    "MUSUH gagal menguasai Domain Controller: kredensial admin.server sudah direset. Tahap dilewati."
+   ],
+   [
+    228,
+    "red",
+    "MUSUH: DCSync dari WEB-01 dengan hak replikasi svc.backup (T1003.006, Credential Access)"
+   ],
+   [
+    228,
+    "alert",
+    "Peringatan S11 \"Replikasi AD dari akun non-mesin (indikasi DCSync)\" (medium) di DC-01"
+   ],
+   [
+    257,
+    "red",
+    "MUSUH: Menghapus log Security di WEB-01 (T1685.005, Defense Evasion)"
+   ],
+   [
+    257,
+    "alert",
+    "Peringatan S13 \"Log event dihapus atau diubah\" (high) di WEB-01"
+   ],
+   [
+    277,
+    "sys",
+    "Gladi selesai: Waktu latihan habis"
+   ]
+  ],
+  "total": 48,
+  "verdict": "NO-GO",
+  "parts": [
+   25,
+   5,
+   8,
+   10
+  ],
+  "objectives": [
+   true,
+   false,
+   true,
+   false
+  ]
+ },
+ {
+  "scenario": "domain-takeover",
+  "code": "MSH-AB12",
+  "actions": [
+   [
+    45,
+    "block",
+    "198.51.100.23"
+   ],
+   [
+    46,
+    "block",
+    "203.0.113.45"
+   ]
+  ],
+  "timeline": [
+   [
+    0,
+    "sys",
+    "Gladi dimulai. Kode latihan MSH-AB12. Skenario: Pengambilalihan direktori jaringan markas"
+   ],
+   [
+    10,
+    "red",
+    "MUSUH: Celah aplikasi web dieksploitasi, web shell ditanam di WEB-01 (T1505.003, Persistence)"
+   ],
+   [
+    10,
+    "alert",
+    "Peringatan S02 \"Web shell dibuat di folder situs\" (medium) di WEB-01"
+   ],
+   [
+    10,
+    "alert",
+    "Peringatan S01 \"Proses mencurigakan dari server web\" (high) di WEB-01"
+   ],
+   [
+    37,
+    "red",
+    "MUSUH: Proksi internal dengan netsh portproxy ke 198.51.100.23 (T1090.001, Command and Control)"
+   ],
+   [
+    37,
+    "alert",
+    "Peringatan S03 \"Aturan port forwarding baru lewat netsh\" (medium) di WEB-01"
+   ],
+   [
+    45,
+    "blue",
+    "Peserta memblokir IP 198.51.100.23 di firewall"
+   ],
+   [
+    46,
+    "blue",
+    "Peserta memblokir IP 203.0.113.45 di firewall"
+   ],
+   [
+    55,
+    "red-blocked",
+    "MUSUH gagal membuka kanal C2 cadangan"
+   ],
+   [
+    73,
+    "red-blocked",
+    "MUSUH tertahan saat memetakan grup admin domain: kanal C2 terputus"
+   ],
+   [
+    330,
+    "sys",
+    "Gladi selesai: Waktu latihan habis"
+   ]
+  ],
+  "total": 90,
+  "verdict": "GO",
+  "parts": [
+   25,
+   30,
+   25,
+   10
+  ],
+  "objectives": [
+   true,
+   true,
+   true,
+   true
+  ]
+ },
+ {
+  "scenario": "domain-takeover",
+  "code": "MSH-0001",
+  "actions": [
+   [
+    130,
+    "reset",
+    "admin.server"
+   ],
+   [
+    131,
+    "reset",
+    "svc.backup"
+   ]
+  ],
+  "timeline": [
+   [
+    0,
+    "sys",
+    "Gladi dimulai. Kode latihan MSH-0001. Skenario: Pengambilalihan direktori jaringan markas"
+   ],
+   [
+    12,
+    "red",
+    "MUSUH: Celah aplikasi web dieksploitasi, web shell ditanam di WEB-01 (T1505.003, Persistence)"
+   ],
+   [
+    12,
+    "alert",
+    "Peringatan S02 \"Web shell dibuat di folder situs\" (medium) di WEB-01"
+   ],
+   [
+    12,
+    "alert",
+    "Peringatan S01 \"Proses mencurigakan dari server web\" (high) di WEB-01"
+   ],
+   [
+    35,
+    "red",
+    "MUSUH: Proksi internal dengan netsh portproxy ke 198.51.100.23 (T1090.001, Command and Control)"
+   ],
+   [
+    35,
+    "alert",
+    "Peringatan S03 \"Aturan port forwarding baru lewat netsh\" (medium) di WEB-01"
+   ],
+   [
+    74,
+    "red",
+    "MUSUH: Enumerasi grup Domain Admins dari web shell (T1069.002, Discovery)"
+   ],
+   [
+    74,
+    "alert",
+    "Peringatan S01 \"Proses mencurigakan dari server web\" (high) di WEB-01"
+   ],
+   [
+    74,
+    "alert",
+    "Peringatan S05 \"Pengintaian grup dan akun dengan net.exe\" (medium) di WEB-01"
+   ],
+   [
+    111,
+    "red",
+    "MUSUH: Akses memori LSASS di WEB-01 (T1003.001, Credential Access)"
+   ],
+   [
+    111,
+    "alert",
+    "Peringatan S06 \"Potensi pencurian kredensial dari LSASS\" (medium) di WEB-01"
+   ],
+   [
+    130,
+    "blue",
+    "Peserta mereset kredensial akun admin.server"
+   ],
+   [
+    131,
+    "blue",
+    "Peserta mereset kredensial akun svc.backup"
+   ],
+   [
+    154,
+    "red-blocked",
+    "MUSUH gagal bergerak ke dalam jaringan: kredensial svc.backup sudah direset; kredensial admin.server sudah direset. Tahap dilewati."
+   ],
+   [
+    194,
+    "red-blocked",
+    "MUSUH gagal menguasai Domain Controller: belum punya pijakan di FS-01. Tahap dilewati."
+   ],
+   [
+    229,
+    "red-blocked",
+    "MUSUH tertahan saat mencuri basis data akun domain: belum punya pijakan di DC-01; kredensial svc.backup sudah direset"
+   ],
+   [
+    330,
+    "sys",
+    "Gladi selesai: Waktu latihan habis"
+   ]
+  ],
+  "total": 72,
+  "verdict": "NO-GO",
+  "parts": [
+   25,
+   20,
+   17,
+   10
+  ],
+  "objectives": [
+   true,
+   false,
+   true,
+   true
+  ]
+ },
+ {
+  "scenario": "domain-takeover",
+  "code": "MSH-0001",
+  "actions": [
+   [
+    22,
+    "incident",
+    null
+   ],
+   [
+    23,
+    "isolate",
+    "WEB-01"
+   ]
+  ],
+  "timeline": [
+   [
+    0,
+    "sys",
+    "Gladi dimulai. Kode latihan MSH-0001. Skenario: Pengambilalihan direktori jaringan markas"
+   ],
+   [
+    12,
+    "red",
+    "MUSUH: Celah aplikasi web dieksploitasi, web shell ditanam di WEB-01 (T1505.003, Persistence)"
+   ],
+   [
+    12,
+    "alert",
+    "Peringatan S02 \"Web shell dibuat di folder situs\" (medium) di WEB-01"
+   ],
+   [
+    12,
+    "alert",
+    "Peringatan S01 \"Proses mencurigakan dari server web\" (high) di WEB-01"
+   ],
+   [
+    22,
+    "blue",
+    "Peserta menyatakan INSIDEN"
+   ],
+   [
+    23,
+    "blue",
+    "Peserta mengisolasi host WEB-01"
+   ],
+   [
+    24,
+    "sys",
+    "MUSUH kehilangan semua pijakan di jaringan"
+   ],
+   [
+    34,
+    "sys",
+    "Gladi selesai: MUSUH dilumpuhkan"
+   ]
+  ],
+  "total": 95,
+  "verdict": "GO",
+  "parts": [
+   25,
+   35,
+   25,
+   10
+  ],
+  "objectives": [
+   true,
+   true,
+   true,
+   true
+  ]
+ },
+ {
+  "scenario": "ransomware-pusdat",
+  "code": "MSH-0001",
+  "actions": [],
+  "timeline": [
+   [
+    0,
+    "sys",
+    "Gladi dimulai. Kode latihan MSH-0001. Skenario: Ransomware di pusat data satuan"
+   ],
+   [
+    14,
+    "red",
+    "MUSUH: Beacon HTTP terenkripsi ke 192.0.2.77 (T1071.001, Command and Control)"
+   ],
+   [
+    45,
+    "red",
+    "MUSUH: PsExec dengan adm.pusdat ke HV-01, BAK-01, DB-01 (T1569.002, Execution)"
+   ],
+   [
+    45,
+    "alert",
+    "Peringatan S07 \"Akses ke share ADMIN$\" (low) di HV-01"
+   ],
+   [
+    45,
+    "alert",
+    "Peringatan S08 \"Layanan PsExec berjalan\" (medium) di HV-01"
+   ],
+   [
+    80,
+    "red",
+    "MUSUH: Windows Defender dimatikan di HV-01 (T1685, Defense Evasion)"
+   ],
+   [
+    80,
+    "alert",
+    "Peringatan S14 \"Windows Defender diubah lewat Set-MpPreference\" (high) di HV-01"
+   ],
+   [
+    80,
+    "alert",
+    "Peringatan S15 \"Layanan Windows Defender berhenti\" (medium) di HV-01"
+   ],
+   [
+    130,
+    "red",
+    "MUSUH: Layanan cadangan dan basis data dihentikan (T1489, Impact)"
+   ],
+   [
+    130,
+    "alert",
+    "Peringatan S16 \"Layanan dihentikan lewat net.exe\" (low) di BAK-01"
+   ],
+   [
+    130,
+    "alert",
+    "Peringatan S16 \"Layanan dihentikan lewat net.exe\" (low) di DB-01"
+   ],
+   [
+    169,
+    "red",
+    "MUSUH: Shadow copy di BAK-01 dihapus (T1490, Impact)"
+   ],
+   [
+    169,
+    "alert",
+    "Peringatan S17 \"Shadow copy dihapus dengan utilitas sistem\" (high) di BAK-01"
+   ],
+   [
+    207,
+    "red",
+    "MUSUH: Disk mesin virtual di HV-01 dienkripsi (T1486, Impact)"
+   ],
+   [
+    207,
+    "alert",
+    "Peringatan S18 \"Ekstensi tambahan mencurigakan pada berkas\" (medium) di HV-01"
+   ],
+   [
+    227,
+    "sys",
+    "Gladi selesai: Waktu latihan habis"
+   ]
+  ],
+  "total": 10,
+  "verdict": "NO-GO",
+  "parts": [
+   0,
+   0,
+   0,
+   10
+  ],
+  "objectives": [
+   false,
+   false,
+   false
+  ]
+ },
+ {
+  "scenario": "ransomware-pusdat",
+  "code": "MSH-K4R7",
+  "actions": [
+   [
+    30,
+    "reset",
+    "adm.pusdat"
+   ]
+  ],
+  "timeline": [
+   [
+    0,
+    "sys",
+    "Gladi dimulai. Kode latihan MSH-K4R7. Skenario: Ransomware di pusat data satuan"
+   ],
+   [
+    11,
+    "red",
+    "MUSUH: Beacon HTTP terenkripsi ke 192.0.2.77 (T1071.001, Command and Control)"
+   ],
+   [
+    30,
+    "blue",
+    "Peserta mereset kredensial akun adm.pusdat"
+   ],
+   [
+    48,
+    "red",
+    "MUSUH: Akun lokal localadmin dipakai ke HV-01, BAK-01, DB-01 (T1078.003, Lateral Movement)"
+   ],
+   [
+    48,
+    "alert",
+    "Peringatan S09 \"Indikasi pass-the-hash\" (medium) di HV-01"
+   ],
+   [
+    80,
+    "red",
+    "MUSUH: Windows Defender dimatikan di HV-01 (T1685, Defense Evasion)"
+   ],
+   [
+    80,
+    "alert",
+    "Peringatan S14 \"Windows Defender diubah lewat Set-MpPreference\" (high) di HV-01"
+   ],
+   [
+    80,
+    "alert",
+    "Peringatan S15 \"Layanan Windows Defender berhenti\" (medium) di HV-01"
+   ],
+   [
+    131,
+    "red",
+    "MUSUH: Layanan cadangan dan basis data dihentikan (T1489, Impact)"
+   ],
+   [
+    131,
+    "alert",
+    "Peringatan S16 \"Layanan dihentikan lewat net.exe\" (low) di BAK-01"
+   ],
+   [
+    131,
+    "alert",
+    "Peringatan S16 \"Layanan dihentikan lewat net.exe\" (low) di DB-01"
+   ],
+   [
+    166,
+    "red",
+    "MUSUH: Shadow copy di BAK-01 dihapus (T1490, Impact)"
+   ],
+   [
+    166,
+    "alert",
+    "Peringatan S17 \"Shadow copy dihapus dengan utilitas sistem\" (high) di BAK-01"
+   ],
+   [
+    209,
+    "red",
+    "MUSUH: Disk mesin virtual di HV-01 dienkripsi (T1486, Impact)"
+   ],
+   [
+    209,
+    "alert",
+    "Peringatan S18 \"Ekstensi tambahan mencurigakan pada berkas\" (medium) di HV-01"
+   ],
+   [
+    229,
+    "sys",
+    "Gladi selesai: Waktu latihan habis"
+   ]
+  ],
+  "total": 35,
+  "verdict": "NO-GO",
+  "parts": [
+   25,
+   0,
+   0,
+   10
+  ],
+  "objectives": [
+   true,
+   false,
+   false
+  ]
+ },
+ {
+  "scenario": "ransomware-pusdat",
+  "code": "MSH-0001",
+  "actions": [
+   [
+    90,
+    "isolate",
+    "HV-01"
+   ],
+   [
+    95,
+    "isolate",
+    "WS-99"
+   ]
+  ],
+  "timeline": [
+   [
+    0,
+    "sys",
+    "Gladi dimulai. Kode latihan MSH-0001. Skenario: Ransomware di pusat data satuan"
+   ],
+   [
+    14,
+    "red",
+    "MUSUH: Beacon HTTP terenkripsi ke 192.0.2.77 (T1071.001, Command and Control)"
+   ],
+   [
+    45,
+    "red",
+    "MUSUH: PsExec dengan adm.pusdat ke HV-01, BAK-01, DB-01 (T1569.002, Execution)"
+   ],
+   [
+    45,
+    "alert",
+    "Peringatan S07 \"Akses ke share ADMIN$\" (low) di HV-01"
+   ],
+   [
+    45,
+    "alert",
+    "Peringatan S08 \"Layanan PsExec berjalan\" (medium) di HV-01"
+   ],
+   [
+    80,
+    "red",
+    "MUSUH: Windows Defender dimatikan di HV-01 (T1685, Defense Evasion)"
+   ],
+   [
+    80,
+    "alert",
+    "Peringatan S14 \"Windows Defender diubah lewat Set-MpPreference\" (high) di HV-01"
+   ],
+   [
+    80,
+    "alert",
+    "Peringatan S15 \"Layanan Windows Defender berhenti\" (medium) di HV-01"
+   ],
+   [
+    90,
+    "blue",
+    "Peserta mengisolasi host HV-01"
+   ],
+   [
+    130,
+    "red",
+    "MUSUH: Layanan cadangan dan basis data dihentikan (T1489, Impact)"
+   ],
+   [
+    130,
+    "alert",
+    "Peringatan S16 \"Layanan dihentikan lewat net.exe\" (low) di BAK-01"
+   ],
+   [
+    130,
+    "alert",
+    "Peringatan S16 \"Layanan dihentikan lewat net.exe\" (low) di DB-01"
+   ],
+   [
+    169,
+    "red",
+    "MUSUH: Shadow copy di BAK-01 dihapus (T1490, Impact)"
+   ],
+   [
+    169,
+    "alert",
+    "Peringatan S17 \"Shadow copy dihapus dengan utilitas sistem\" (high) di BAK-01"
+   ],
+   [
+    207,
+    "red",
+    "MUSUH: Berkas di DB-01 dienkripsi (T1486, Impact)"
+   ],
+   [
+    207,
+    "alert",
+    "Peringatan S18 \"Ekstensi tambahan mencurigakan pada berkas\" (medium) di DB-01"
+   ],
+   [
+    227,
+    "sys",
+    "Gladi selesai: Waktu latihan habis"
+   ]
+  ],
+  "total": 48,
+  "verdict": "NO-GO",
+  "parts": [
+   25,
+   0,
+   13,
+   10
+  ],
+  "objectives": [
+   true,
+   false,
+   true
+  ]
+ },
+ {
+  "scenario": "listrik-markas",
+  "code": "MSH-0001",
+  "actions": [],
+  "timeline": [
+   [
+    0,
+    "sys",
+    "Gladi dimulai. Kode latihan MSH-0001. Skenario: Serangan ke pasokan listrik markas"
+   ],
+   [
+    13,
+    "red",
+    "MUSUH: Lampiran Office bermakro dibuka di WS-01 (T1566.001, Initial Access)"
+   ],
+   [
+    13,
+    "alert",
+    "Peringatan S19 \"Proses anak mencurigakan dari Microsoft Office\" (high) di WS-01"
+   ],
+   [
+    38,
+    "red",
+    "MUSUH: Kanal kendali HTTP ke 192.0.2.150 (T1071.001, Command and Control)"
+   ],
+   [
+    38,
+    "alert",
+    "Peringatan S20 \"Rundll32 terhubung ke internet\" (medium) di WS-01"
+   ],
+   [
+    83,
+    "red",
+    "MUSUH: Keylogger merekam kredensial VPN operator (T1056.001, Credential Access)"
+   ],
+   [
+    128,
+    "red",
+    "MUSUH: Login VPN ke jaringan kendali dengan akun op.genset, lalu RDP ke HMI-01 (T0822, ICS Initial Access)"
+   ],
+   [
+    128,
+    "alert",
+    "Peringatan M03 \"Login RDP ke segmen OT\" (high) di HMI-01"
+   ],
+   [
+    178,
+    "red",
+    "MUSUH: Membaca holding register pengendali genset lewat Modbus TCP 502 (T0801, ICS Collection)"
+   ],
+   [
+    178,
+    "alert",
+    "Peringatan M02 \"Pembacaan register Modbus ke pengendali genset\" (medium) di PLC-GEN"
+   ],
+   [
+    214,
+    "red",
+    "MUSUH: Menulis register Modbus: perintah henti genset (T0836, ICS Impair Process Control)"
+   ],
+   [
+    214,
+    "alert",
+    "Peringatan M01 \"Perintah tulis Modbus ke pengendali genset\" (critical) di PLC-GEN"
+   ],
+   [
+    214,
+    "ot",
+    "Genset BERHENTI: register pengendali ditulis lewat Modbus dari HMI-01"
+   ],
+   [
+    259,
+    "sys",
+    "Gladi selesai: Waktu latihan habis"
+   ]
+  ],
+  "total": 10,
+  "verdict": "NO-GO",
+  "parts": [
+   0,
+   0,
+   0,
+   10
+  ],
+  "objectives": [
+   false,
+   false,
+   false
+  ]
+ },
+ {
+  "scenario": "listrik-markas",
+  "code": "MSH-1945",
+  "actions": [
+   [
+    110,
+    "isolate",
+    "VPN-01"
+   ],
+   [
+    230,
+    "modbus-block",
+    null
+   ],
+   [
+    232,
+    "genset-start",
+    null
+   ]
+  ],
+  "timeline": [
+   [
+    0,
+    "sys",
+    "Gladi dimulai. Kode latihan MSH-1945. Skenario: Serangan ke pasokan listrik markas"
+   ],
+   [
+    12,
+    "red",
+    "MUSUH: Lampiran Office bermakro dibuka di WS-01 (T1566.001, Initial Access)"
+   ],
+   [
+    12,
+    "alert",
+    "Peringatan S19 \"Proses anak mencurigakan dari Microsoft Office\" (high) di WS-01"
+   ],
+   [
+    39,
+    "red",
+    "MUSUH: Kanal kendali HTTP ke 192.0.2.150 (T1071.001, Command and Control)"
+   ],
+   [
+    39,
+    "alert",
+    "Peringatan S20 \"Rundll32 terhubung ke internet\" (medium) di WS-01"
+   ],
+   [
+    82,
+    "red",
+    "MUSUH: Keylogger merekam kredensial VPN operator (T1056.001, Credential Access)"
+   ],
+   [
+    110,
+    "blue",
+    "Peserta mengisolasi host VPN-01"
+   ],
+   [
+    127,
+    "red",
+    "MUSUH: Lewat koneksi langsung WS-01 ke HMI-01 (aturan firewall yang terlalu longgar) (T0886, ICS Lateral Movement)"
+   ],
+   [
+    127,
+    "alert",
+    "Peringatan M03 \"Login RDP ke segmen OT\" (high) di HMI-01"
+   ],
+   [
+    175,
+    "red",
+    "MUSUH: Membaca holding register pengendali genset lewat Modbus TCP 502 (T0801, ICS Collection)"
+   ],
+   [
+    175,
+    "alert",
+    "Peringatan M02 \"Pembacaan register Modbus ke pengendali genset\" (medium) di PLC-GEN"
+   ],
+   [
+    213,
+    "red",
+    "MUSUH: Menulis register Modbus: perintah henti genset (T0836, ICS Impair Process Control)"
+   ],
+   [
+    213,
+    "alert",
+    "Peringatan M01 \"Perintah tulis Modbus ke pengendali genset\" (critical) di PLC-GEN"
+   ],
+   [
+    213,
+    "ot",
+    "Genset BERHENTI: register pengendali ditulis lewat Modbus dari HMI-01"
+   ],
+   [
+    230,
+    "blue",
+    "Peserta memblokir perintah tulis Modbus ke PLC-GEN"
+   ],
+   [
+    232,
+    "blue",
+    "Peserta menyalakan ulang genset dari panel lokal"
+   ],
+   [
+    258,
+    "sys",
+    "Gladi selesai: Waktu latihan habis"
+   ]
+  ],
+  "total": 43,
+  "verdict": "NO-GO",
+  "parts": [
+   25,
+   0,
+   13,
+   5
+  ],
+  "objectives": [
+   true,
+   false,
+   true
+  ]
+ },
+ {
+  "scenario": "listrik-markas",
+  "code": "MSH-0001",
+  "actions": [
+   [
+    110,
+    "reset",
+    "op.genset"
+   ]
+  ],
+  "timeline": [
+   [
+    0,
+    "sys",
+    "Gladi dimulai. Kode latihan MSH-0001. Skenario: Serangan ke pasokan listrik markas"
+   ],
+   [
+    13,
+    "red",
+    "MUSUH: Lampiran Office bermakro dibuka di WS-01 (T1566.001, Initial Access)"
+   ],
+   [
+    13,
+    "alert",
+    "Peringatan S19 \"Proses anak mencurigakan dari Microsoft Office\" (high) di WS-01"
+   ],
+   [
+    38,
+    "red",
+    "MUSUH: Kanal kendali HTTP ke 192.0.2.150 (T1071.001, Command and Control)"
+   ],
+   [
+    38,
+    "alert",
+    "Peringatan S20 \"Rundll32 terhubung ke internet\" (medium) di WS-01"
+   ],
+   [
+    83,
+    "red",
+    "MUSUH: Keylogger merekam kredensial VPN operator (T1056.001, Credential Access)"
+   ],
+   [
+    110,
+    "blue",
+    "Peserta mereset kredensial akun op.genset"
+   ],
+   [
+    128,
+    "red-blocked",
+    "MUSUH tertahan saat masuk ke jaringan kendali genset: kredensial op.genset sudah direset; semua kredensial curian sudah direset"
+   ],
+   [
+    360,
+    "sys",
+    "Gladi selesai: Waktu latihan habis"
+   ]
+  ],
+  "total": 80,
+  "verdict": "GO",
+  "parts": [
+   25,
+   20,
+   25,
+   10
+  ],
+  "objectives": [
+   true,
+   true,
+   true
+  ]
+ }
+]

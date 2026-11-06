@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MUSUH · Konsol Latihan Siber</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 12 12%22%3E%3Cpath d=%22M6 10.96 .84 1.5h10.32z%22 fill=%22%23ff3838%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/css/00-tokens.css"><link rel="stylesheet" href="/css/01-gsb.css"><link rel="stylesheet" href="/css/02-controls.css">
+<link rel="stylesheet" href="/css/03-ops.css"><link rel="stylesheet" href="/css/04-queue.css"><link rel="stylesheet" href="/css/05-detail.css">
+<link rel="stylesheet" href="/css/06-setup.css"><link rel="stylesheet" href="/css/07-eval.css"><link rel="stylesheet" href="/css/08-rapor.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <!-- Astro UXDS status symbols, shapes from rux-status (critical triangle, serious diamond, caution square, normal circle, standby ring, off dot) -->
+  <symbol id="s-critical" viewBox="0 0 12 12"><path d="M6 10.96 .84 1.5h10.32z" fill="#ff3838"/></symbol>
+  <symbol id="s-serious" viewBox="0 0 12 12"><rect x="1.05" y="6" width="7.3" height="7.3" transform="rotate(-45 1.05 6)" fill="#ffb302"/></symbol>
+  <symbol id="s-caution" viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" fill="#fce83a"/></symbol>
+  <symbol id="s-normal" viewBox="0 0 12 12"><circle cx="6" cy="6" r="4" fill="#56f000"/></symbol>
+  <symbol id="s-standby" viewBox="0 0 12 12"><circle cx="6" cy="6" r="4.5" fill="none" stroke="#2dccff" stroke-width="1.6"/><circle cx="6" cy="6" r="1.6" fill="#2dccff"/></symbol>
+  <symbol id="s-off" viewBox="0 0 12 12"><circle cx="6" cy="6" r="3" fill="#a4abb6"/></symbol>
+  <!-- line icons -->
+  <symbol id="i-pc" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20h8M12 16v4"/></symbol>
+  <symbol id="i-server" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="7" rx="1.5"/><rect x="3" y="14" width="18" height="7" rx="1.5"/><path d="M7 6.5h.01M7 17.5h.01"/></symbol>
+  <symbol id="i-dc" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M8 7h8M8 11h8M8 15h5"/><circle cx="16.5" cy="16.5" r="1"/></symbol>
+  <symbol id="i-web" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="1.5"/><path d="M3 8h18M6 6h.01M8.5 6h.01"/><path d="M8 13l-2 2 2 2M16 13l2 2-2 2M13 12l-2 6"/></symbol>
+  <symbol id="i-vpn" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="1.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v2"/></symbol>
+  <symbol id="i-plc" viewBox="0 0 24 24"><path d="M2 21V10l6 4V10l6 4V6l8 4v11z"/><path d="M6 17h2M11 17h2M16 17h2"/></symbol>
+  <symbol id="i-hmi" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M7 12l3-3 3 2 4-4M8 20h8M12 16v4"/></symbol>
+  <symbol id="i-hv" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1.5"/><rect x="6" y="6" width="5" height="5"/><rect x="13" y="6" width="5" height="5"/><rect x="6" y="13" width="5" height="5"/><rect x="13" y="13" width="5" height="5"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="m3 7 9 6 9-6"/></symbol>
+  <symbol id="i-cut" viewBox="0 0 24 24"><path d="M4 4l16 16"/><rect x="8" y="8" width="8" height="8" rx="1"/></symbol>
+  <symbol id="i-wall" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M3 9h18M3 14h18M9 4v5M15 9v5M9 14v6"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l3 3M14 9l2 2"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 22V3M5 4h13l-2 4 2 4H5"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4v16l13-8z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M7 4v16M17 4v16"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 4.8 1c0 1.7-2.3 2-2.3 3.5M12 17h.01"/></symbol>
+  <symbol id="i-screen" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="13" rx="1.5"/><path d="M8 21h8M12 17v4M7 9l3 3-3 3"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></symbol>
+  <symbol id="i-print" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></symbol>
+  <symbol id="i-handover" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/><path d="M5 5v14"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2 20 5v6c0 5-3.4 9.4-8 11-4.6-1.6-8-6-8-11V5z"/></symbol>
+</defs></svg>
+
+<div class="flagline" aria-hidden="true"><i></i><i></i></div>
+<header class="gsb" id="gsb"></header>
+<main>
+  <section class="screen" id="scr-siapkan"></section>
+  <section class="screen" id="scr-operasi"></section>
+  <section class="screen" id="scr-evaluasi"></section>
+  <section class="screen" id="scr-rapor"></section>
+</main>
+<dialog id="help"></dialog>
+<div id="toast" class="toast" hidden role="status"></div>
+<script src="/js/00-core.js"></script>
+<script src="/js/10-gsb.js"></script>
+<script src="/js/20-setup.js"></script>
+<script src="/js/30-ops.js"></script>
+<script src="/js/31-keys.js"></script>
+<script src="/js/40-eval.js"></script>
+<script src="/js/50-rapor.js"></script>
+<script src="/js/90-boot.js"></script>
+</body>
+</html>

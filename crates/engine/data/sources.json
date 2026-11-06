@@ -1,0 +1,30 @@
+{
+ "KW26": {
+  "label": "Keris Woomera 2026: skenario Red Team TNI (eksploitasi Windows, eskalasi hak akses, penguasaan direktori jaringan)",
+  "url": "https://korem072.tni-ad.mil.id/tni-adf-perkuat-pertahanan-siber-melalui-simulasi-terpadu-keris-woomera-2026/"
+ },
+ "VOLT": {
+  "label": "MITRE ATT&CK G1017 Volt Typhoon (CISA AA24-038A)",
+  "url": "https://attack.mitre.org/groups/G1017/"
+ },
+ "PDNS": {
+  "label": "BSSN, analisis forensik sementara PDNS 2 (Juni 2024), via detikINET",
+  "url": "https://inet.detik.com/security/d-7409192/detik-detik-ransomware-brain-cipher-lumpuhkan-pusat-data-indonesia"
+ },
+ "LB3": {
+  "label": "MITRE ATT&CK S1202 LockBit 3.0 (Brain Cipher = varian LockBit 3.0 menurut BSSN)",
+  "url": "https://attack.mitre.org/software/S1202/"
+ },
+ "UA15": {
+  "label": "MITRE ATT&CK C0028, serangan jaringan listrik Ukraina 2015",
+  "url": "https://attack.mitre.org/campaigns/C0028/"
+ },
+ "AIMX": {
+  "label": "MITRE ATT&CK C0064 (Chisel SOCKS proxy, T1572)",
+  "url": "https://attack.mitre.org/campaigns/C0064/"
+ },
+ "FGP": {
+  "label": "MITRE ATT&CK C0041 FrostyGoop (Modbus, Ukraina Jan 2024) dan S1165",
+  "url": "https://attack.mitre.org/campaigns/C0041/"
+ }
+}

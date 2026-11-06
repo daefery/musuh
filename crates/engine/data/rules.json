@@ -1,0 +1,644 @@
+[
+ {
+  "id": "S01",
+  "title": "Proses mencurigakan dari server web",
+  "sigmaTitle": "Suspicious Process By Web Server Process",
+  "level": "high",
+  "sid": "8202070f-edeb-4d31-a010-a26c72ac5600",
+  "path": "rules/windows/process_creation/proc_creation_win_webshell_susp_process_spawned_from_webserver.yml",
+  "src": "Sysmon",
+  "eid": "1",
+  "sel": {
+   "ParentImage": {
+    "endswith": [
+     "\\w3wp.exe",
+     "\\httpd.exe",
+     "\\nginx.exe",
+     "\\php-cgi.exe",
+     "\\tomcat.exe"
+    ]
+   },
+   "Image": {
+    "endswith": [
+     "\\cmd.exe",
+     "\\net.exe",
+     "\\net1.exe",
+     "\\netsh.exe",
+     "\\powershell.exe",
+     "\\rundll32.exe",
+     "\\wmic.exe",
+     "\\reg.exe",
+     "\\ntdsutil.exe"
+    ]
+   }
+  },
+  "simplified": "daftar proses induk dan anak dipersingkat; filter positif palsu ManageEngine tidak disertakan",
+  "own": false,
+  "hostSeg": null
+ },
+ {
+  "id": "S02",
+  "title": "Web shell dibuat di folder situs",
+  "sigmaTitle": "Potential Webshell Creation On Static Website",
+  "level": "medium",
+  "sid": "39f1f9f2-9636-45de-98f6-a4046aa8e4b9",
+  "path": "rules/windows/file/file_event/file_event_win_webshell_creation_detect.yml",
+  "src": "Sysmon",
+  "eid": "11",
+  "sel": {
+   "TargetFilename": {
+    "contains": [
+     "\\inetpub\\wwwroot\\"
+    ],
+    "containsAny2": [
+     ".ashx",
+     ".asp",
+     ".ph",
+     ".soap"
+    ]
+   }
+  },
+  "simplified": "hanya cabang wwwroot; cabang htdocs dan filter Temp/xampp tidak disertakan",
+  "own": false,
+  "hostSeg": null
+ },
+ {
+  "id": "S03",
+  "title": "Aturan port forwarding baru lewat netsh",
+  "sigmaTitle": "New Port Forwarding Rule Added Via Netsh.EXE",
+  "level": "medium",
+  "sid": "322ed9ec-fcab-4f67-9a34-e7c6aef43614",
+  "path": "rules/windows/process_creation/proc_creation_win_netsh_port_forwarding.yml",
+  "src": "Sysmon",
+  "eid": "1",
+  "sel": {
+   "Image": {
+    "endswith": [
+     "\\netsh.exe"
+    ]
+   },
+   "CommandLine": {
+    "containsAll": [
+     "interface",
+     "portproxy",
+     "add",
+     "v4tov4"
+    ]
+   }
+  },
+  "simplified": "hanya selection_cli_1",
+  "own": false,
+  "hostSeg": null
+ },
+ {
+  "id": "S04",
+  "title": "Alat terowongan Chisel dijalankan",
+  "sigmaTitle": "PUA - Chisel Tunneling Tool Execution",
+  "level": "high",
+  "sid": "8b0e12da-d3c3-49db-bb4f-256703f380e5",
+  "path": "rules/windows/process_creation/proc_creation_win_pua_chisel.yml",
+  "src": "Sysmon",
+  "eid": "1",
+  "sel": {
+   "Image": {
+    "endswith": [
+     "\\chisel.exe"
+    ]
+   }
+  },
+  "simplified": "hanya selection_img",
+  "own": false,
+  "hostSeg": null
+ },
+ {
+  "id": "S05",
+  "title": "Pengintaian grup dan akun dengan net.exe",
+  "sigmaTitle": "Suspicious Group And Account Reconnaissance Activity Using Net.EXE",
+  "level": "medium",
+  "sid": "d95de845-b83c-4a9a-8a6a-4fc802ebf6c0",
+  "path": "rules/windows/process_creation/proc_creation_win_net_groups_and_accounts_recon.yml",
+  "src": "Sysmon",
+  "eid": "1",
+  "sel": {
+   "Image": {
+    "endswith": [
+     "\\net.exe",
+     "\\net1.exe"
+    ]
+   },
+   "CommandLine": {
+    "contains": [
+     " group ",
+     " localgroup "
+    ],
+    "containsAny2": [
+     "domain admins",
+     " administrator",
+     "enterprise admins",
+     " /do"
+    ]
+   }
+  },
+  "simplified": "cabang 'accounts' dan filter '/add' tidak disertakan",
+  "own": false,
+  "hostSeg": null
+ },
+ {
+  "id": "S06",
+  "title": "Potensi pencurian kredensial dari LSASS",
+  "sigmaTitle": "Potential Credential Dumping Activity Via LSASS",
+  "level": "medium",
+  "sid": "5ef9853e-4d0e-4a70-846f-a9ca37d876da",
+  "path": "rules/windows/process_access/proc_access_win_lsass_memdump.yml",
+  "src": "Sysmon",
+  "eid": "10",
+  "sel": {
+   "TargetImage": {
+    "endswith": [
+     "\\lsass.exe"
+    ]
+   },
+   "GrantedAccess": {
+    "contains": [
+     "0x1038",
+     "0x1438",
+     "0x143a",
+     "0x1fffff"
+    ]
+   },
+   "CallTrace": {
+    "contains": [
+     "dbgcore.dll",
+     "dbghelp.dll",
+     "kernel32.dll",
+     "kernelbase.dll",
+     "ntdll.dll"
+    ]
+   }
+  },
+  "simplified": "filter akun SYSTEM, THOR dan Sysmon tidak disertakan",
+  "own": false,
+  "hostSeg": null
+ },
+ {
+  "id": "S07",
+  "title": "Akses ke share ADMIN$",
+  "sigmaTitle": "Access To ADMIN$ Network Share",
+  "level": "low",
+  "sid": "098d7118-55bc-4912-a836-dc6483a8d150",
+  "path": "rules/windows/builtin/security/win_security_admin_share_access.yml",
+  "src": "Security",
+  "eid": "5140",
+  "sel": {
+   "ShareName": {
+    "contains": [
+     "admin$"
+    ]
+   }
+  },
+  "simplified": "filter akun komputer ($) tidak disertakan; nilai ShareName dicocokkan dengan 'contains'",
+  "own": false,
+  "hostSeg": null
+ },
+ {
+  "id": "S08",
+  "title": "Layanan PsExec berjalan",
+  "sigmaTitle": "PsExec Service Execution",
+  "level": "medium",
+  "sid": "fdfcbd78-48f1-4a4b-90ac-d82241e368c5",
+  "path": "rules/windows/process_creation/proc_creation_win_sysinternals_psexesvc.yml",
+  "src": "Sysmon",
+  "eid": "1",
+  "sel": {
+   "Image": {
+    "eq": [
+     "C:\\Windows\\PSEXESVC.exe"
+    ]
+   }
+  },
+  "simplified": "cabang OriginalFileName tidak disertakan",
+  "own": false,
+  "hostSeg": null
+ },
+ {
+  "id": "S09",
+  "title": "Indikasi pass-the-hash",
+  "sigmaTitle": "Pass the Hash Activity 2",
+  "level": "medium",
+  "sid": "8eef149c-bd26-49f2-9e5a-9b00e3af499b",
+  "path": "rules/windows/builtin/security/account_management/win_security_pass_the_hash_2.yml",
+  "src": "Security",
+  "eid": "4624",
+  "sel": {
+   "SubjectUserSid": {
+    "eq": [
+     "S-1-0-0"
+    ]
+   },
+   "LogonType": {
+    "eq": [
+     3
+    ]
+   },
+   "LogonProcessName": {
+    "eq": [
+     "NtLmSsp"
+    ]
+   },
+   "KeyLength": {
+    "eq": [
+     0
+    ]
+   }
+  },
+  "simplified": "cabang LogonType 9 dan filter ANONYMOUS LOGON tidak disertakan",
+  "own": false,
+  "hostSeg": null
+ },
+ {
+  "id": "S10",
+  "title": "Logon jarak jauh (RDP) akun admin",
+  "sigmaTitle": "Admin User Remote Logon",
+  "level": "low",
+  "sid": "0f63e1ef-1eb9-4226-9d54-8927ca08520a",
+  "path": "rules/windows/builtin/security/account_management/win_security_admin_rdp_login.yml",
+  "src": "Security",
+  "eid": "4624",
+  "sel": {
+   "LogonType": {
+    "eq": [
+     10
+    ]
+   },
+   "AuthenticationPackageName": {
+    "eq": [
+     "Negotiate"
+    ]
+   },
+   "TargetUserName": {
+    "startswith": [
+     "admin"
+    ]
+   }
+  },
+  "simplified": "aturan asli mensyaratkan pola nama admin satuan; di sini 'admin*'",
+  "own": false,
+  "hostSeg": null
+ },
+ {
+  "id": "S11",
+  "title": "Replikasi AD dari akun non-mesin (indikasi DCSync)",
+  "sigmaTitle": "Active Directory Replication from Non Machine Account - DcSync Indicator",
+  "level": "medium",
+  "sid": "17d619c1-e020-4347-957e-1d1207455c93",
+  "path": "rules/windows/builtin/security/win_security_ad_replication_non_machine_account.yml",
+  "src": "Security",
+  "eid": "4662",
+  "sel": {
+   "Properties": {
+    "contains": [
+     "1131f6ad-9c07-11d1-f79f-00c04fc2dcd2",
+     "1131f6aa-9c07-11d1-f79f-00c04fc2dcd2",
+     "9923a32a-3607-11d2-b9be-0000f87a36b2",
+     "89e95b76-444d-4c62-991a-0facbeda640c"
+    ]
+   },
+   "SubjectUserName": {
+    "notendswith": [
+     "$"
+    ]
+   }
+  },
+  "simplified": "filter opsional (Window Manager, NT AUT, MSOL_) tidak disertakan",
+  "own": false,
+  "hostSeg": null
+ },
+ {
+  "id": "S12",
+  "title": "Penggunaan ntdsutil yang mencurigakan",
+  "sigmaTitle": "Suspicious Usage Of Active Directory Diagnostic Tool (ntdsutil.exe)",
+  "level": "medium",
+  "sid": "a58353df-af43-4753-bad0-cd83ef35eef5",
+  "path": "rules/windows/process_creation/proc_creation_win_ntdsutil_susp_usage.yml",
+  "src": "Sysmon",
+  "eid": "1",
+  "sel": {
+   "Image": {
+    "endswith": [
+     "\\ntdsutil.exe"
+    ]
+   },
+   "CommandLine": {
+    "containsAll": [
+     "ac",
+     " i",
+     " ntds"
+    ]
+   }
+  },
+  "simplified": "cabang 'snapshot mount' tidak disertakan",
+  "own": false,
+  "hostSeg": null
+ },
+ {
+  "id": "S13",
+  "title": "Log event dihapus atau diubah",
+  "sigmaTitle": "Suspicious Eventlog Clearing or Configuration Change Activity",
+  "level": "high",
+  "sid": "cc36992a-4671-4f21-a91d-6c2b72a2edf5",
+  "path": "rules/windows/process_creation/proc_creation_win_susp_eventlog_clear.yml",
+  "src": "Sysmon",
+  "eid": "1",
+  "sel": {
+   "Image": {
+    "endswith": [
+     "\\wevtutil.exe"
+    ]
+   },
+   "CommandLine": {
+    "contains": [
+     "clear-log ",
+     " cl ",
+     "set-log ",
+     " sl "
+    ]
+   }
+  },
+  "simplified": "hanya cabang wevtutil; cabang PowerShell/WMI dan filter msiexec tidak disertakan",
+  "own": false,
+  "hostSeg": null
+ },
+ {
+  "id": "S14",
+  "title": "Windows Defender diubah lewat Set-MpPreference",
+  "sigmaTitle": "Tamper Windows Defender - PSClassic",
+  "level": "high",
+  "sid": "ec19ebab-72dc-40e1-9728-4c0b805d722c",
+  "path": "rules/windows/powershell/powershell_classic/posh_pc_tamper_windows_defender_set_mp.yml",
+  "src": "PowerShell",
+  "eid": "400",
+  "sel": {
+   "Data": {
+    "contains": [
+     "Set-MpPreference"
+    ],
+    "containsAny2": [
+     "-DisableRealtimeMonitoring $true",
+     "-DisableRealtimeMonitoring 1",
+     "-DisableBehaviorMonitoring $true",
+     "-DisableIOAVProtection $true"
+    ]
+   }
+  },
+  "simplified": "daftar opsi Set-MpPreference dipersingkat",
+  "own": false,
+  "hostSeg": null
+ },
+ {
+  "id": "S15",
+  "title": "Layanan Windows Defender berhenti",
+  "sigmaTitle": "Windows Defender Threat Detection Service Disabled",
+  "level": "medium",
+  "sid": "6c0a7755-6d31-44fa-80e1-133e57752680",
+  "path": "rules/windows/builtin/system/service_control_manager/win_system_defender_disabled.yml",
+  "src": "System",
+  "eid": "7036",
+  "sel": {
+   "Provider_Name": {
+    "eq": [
+     "Service Control Manager"
+    ]
+   },
+   "param1": {
+    "eq": [
+     "Windows Defender Antivirus Service"
+    ]
+   },
+   "param2": {
+    "eq": [
+     "stopped"
+    ]
+   }
+  },
+  "simplified": "varian bahasa Prancis tidak disertakan",
+  "own": false,
+  "hostSeg": null
+ },
+ {
+  "id": "S16",
+  "title": "Layanan dihentikan lewat net.exe",
+  "sigmaTitle": "Stop Windows Service Via Net.EXE",
+  "level": "low",
+  "sid": "88872991-7445-4a22-90b2-a3adadb0e827",
+  "path": "rules/windows/process_creation/proc_creation_win_net_stop_service.yml",
+  "src": "Sysmon",
+  "eid": "1",
+  "sel": {
+   "Image": {
+    "endswith": [
+     "\\net.exe",
+     "\\net1.exe"
+    ]
+   },
+   "CommandLine": {
+    "contains": [
+     " stop "
+    ]
+   }
+  },
+  "simplified": "cabang OriginalFileName tidak disertakan",
+  "own": false,
+  "hostSeg": null
+ },
+ {
+  "id": "S17",
+  "title": "Shadow copy dihapus dengan utilitas sistem",
+  "sigmaTitle": "Shadow Copies Deletion Using Operating Systems Utilities",
+  "level": "high",
+  "sid": "c947b146-0abc-4c87-9c64-b17e9d7274a2",
+  "path": "rules/windows/process_creation/proc_creation_win_susp_shadow_copies_deletion.yml",
+  "src": "Sysmon",
+  "eid": "1",
+  "sel": {
+   "Image": {
+    "endswith": [
+     "\\powershell.exe",
+     "\\wmic.exe",
+     "\\vssadmin.exe",
+     "\\diskshadow.exe"
+    ]
+   },
+   "CommandLine": {
+    "containsAll": [
+     "shadow",
+     "delete"
+    ]
+   }
+  },
+  "simplified": "hanya selection1; cabang wbadmin dan resize shadowstorage tidak disertakan",
+  "own": false,
+  "hostSeg": null
+ },
+ {
+  "id": "S18",
+  "title": "Ekstensi tambahan mencurigakan pada berkas",
+  "sigmaTitle": "Suspicious Appended Extension",
+  "level": "medium",
+  "sid": "e3f673b3-65d1-4d80-9146-466f8b63fa99",
+  "path": "rules/windows/file/file_rename/file_rename_win_ransomware.yml",
+  "src": "FileRename",
+  "eid": "2",
+  "sel": {
+   "SourceFilename": {
+    "endswith": [
+     ".doc",
+     ".docx",
+     ".pdf",
+     ".xls",
+     ".xlsx"
+    ]
+   },
+   "TargetFilename": {
+    "contains": [
+     ".doc.",
+     ".docx.",
+     ".pdf.",
+     ".xls.",
+     ".xlsx."
+    ]
+   }
+  },
+  "simplified": "daftar ekstensi dipersingkat; filter .bak/.old/.orig/.temp tidak disertakan",
+  "own": false,
+  "hostSeg": null
+ },
+ {
+  "id": "S19",
+  "title": "Proses anak mencurigakan dari Microsoft Office",
+  "sigmaTitle": "Suspicious Microsoft Office Child Process",
+  "level": "high",
+  "sid": "438025f9-5856-4663-83f7-52f878a70a50",
+  "path": "rules/windows/process_creation/proc_creation_win_office_susp_child_processes.yml",
+  "src": "Sysmon",
+  "eid": "1",
+  "sel": {
+   "ParentImage": {
+    "endswith": [
+     "\\EXCEL.EXE",
+     "\\WINWORD.EXE",
+     "\\POWERPNT.exe"
+    ]
+   },
+   "Image": {
+    "endswith": [
+     "\\cmd.exe",
+     "\\powershell.exe",
+     "\\rundll32.exe",
+     "\\wscript.exe",
+     "\\mshta.exe"
+    ]
+   }
+  },
+  "simplified": "daftar proses induk dan anak dipersingkat",
+  "own": false,
+  "hostSeg": null
+ },
+ {
+  "id": "S20",
+  "title": "Rundll32 terhubung ke internet",
+  "sigmaTitle": "Rundll32 Internet Connection",
+  "level": "medium",
+  "sid": "cdc8da7d-c303-42f8-b08c-b4ab47230263",
+  "path": "rules/windows/network_connection/net_connection_win_rundll32_net_connections.yml",
+  "src": "Sysmon",
+  "eid": "3",
+  "sel": {
+   "Image": {
+    "endswith": [
+     "\\rundll32.exe"
+    ]
+   },
+   "Initiated": {
+    "eq": [
+     "true"
+    ]
+   },
+   "DestinationIp": {
+    "notprivate": true
+   }
+  },
+  "simplified": "filter rentang Microsoft, PcaSvc, Azure dan svchost tidak disertakan",
+  "own": false,
+  "hostSeg": null
+ },
+ {
+  "id": "M01",
+  "title": "Perintah tulis Modbus ke pengendali genset",
+  "sigmaTitle": null,
+  "level": "critical",
+  "own": true,
+  "src": "Zeek",
+  "eid": "modbus",
+  "sel": {
+   "func": {
+    "startswith": [
+     "WRITE_"
+    ]
+   },
+   "pdu_type": {
+    "eq": [
+     "REQ"
+    ]
+   }
+  },
+  "simplified": "aturan MUSUH sendiri; SigmaHQ tidak punya aturan Modbus. Bidang func/pdu_type dari modbus.log Zeek",
+  "sid": null,
+  "path": null,
+  "hostSeg": null
+ },
+ {
+  "id": "M02",
+  "title": "Pembacaan register Modbus ke pengendali genset",
+  "sigmaTitle": null,
+  "level": "medium",
+  "own": true,
+  "src": "Zeek",
+  "eid": "modbus",
+  "sel": {
+   "func": {
+    "eq": [
+     "READ_HOLDING_REGISTERS"
+    ]
+   },
+   "pdu_type": {
+    "eq": [
+     "REQ"
+    ]
+   }
+  },
+  "simplified": "aturan MUSUH sendiri: setiap pembacaan holding register dicatat untuk ditinjau (pola pemantauan FrostyGoop, T0801); tidak membedakan host lama dan baru",
+  "sid": null,
+  "path": null,
+  "hostSeg": null
+ },
+ {
+  "id": "M03",
+  "title": "Login RDP ke segmen OT",
+  "sigmaTitle": null,
+  "level": "high",
+  "own": true,
+  "src": "Security",
+  "eid": "4624",
+  "sel": {
+   "LogonType": {
+    "eq": [
+     10
+    ]
+   }
+  },
+  "hostSeg": "OT",
+  "simplified": "aturan MUSUH sendiri: setiap RDP ke segmen OT perlu ditinjau (C0028: VPN dan HMI dipakai penyerang)",
+  "sid": null,
+  "path": null
+ }
+]

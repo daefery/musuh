@@ -1,0 +1,32 @@
+@font-face { font-family: Roboto; font-weight: 400; src: url(fonts/roboto-latin-400-normal.woff2); }
+@font-face { font-family: Roboto; font-weight: 500; src: url(fonts/roboto-latin-500-normal.woff2); }
+@font-face { font-family: Roboto; font-weight: 700; src: url(fonts/roboto-latin-700-normal.woff2); }
+@font-face { font-family: "Roboto Mono"; font-weight: 400; src: url(fonts/roboto-mono-latin-400-normal.woff2); }
+@page { size: 1920px 1080px; margin: 0; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #080c11; font-family: Roboto, sans-serif; color: #fff; }
+.slide { width: 1920px; height: 1080px; position: relative; overflow: hidden; background: #101923; page-break-after: always; padding: 96px 120px 80px; display: flex; flex-direction: column; }
+.slide::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 8px; background: linear-gradient(90deg, #e0242b 50%, #f4f4f4 50%); }
+.slide .foot { position: absolute; left: 120px; right: 120px; bottom: 36px; display: flex; justify-content: space-between; color: #a4abb6; font-size: 20px; }
+.kicker { font: 500 26px Roboto; letter-spacing: .14em; color: #4dacff; text-transform: uppercase; margin-bottom: 18px; }
+h1 { font-size: 76px; font-weight: 700; line-height: 1.08; margin: 0 0 28px; letter-spacing: -.01em; }
+h2 { font-size: 58px; font-weight: 700; line-height: 1.12; margin: 0 0 36px; }
+p, li { font-size: 32px; line-height: 1.45; color: #d4d8dd; }
+ul { margin: 0; padding-left: 1.1em; } li { margin-bottom: 14px; }
+.big { font-size: 40px; color: #fff; }
+.mono { font-family: "Roboto Mono", monospace; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; flex: 1; min-height: 0; }
+.grid2.shotwide { grid-template-columns: 0.72fr 1.28fr; gap: 40px; align-items: start; }
+.grid2.shotwide li { font-size: 28px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.card { background: #1b2d3e; border: 1px solid #2b3d50; border-radius: 6px; padding: 32px; }
+.card h3 { margin: 0 0 12px; font-size: 32px; font-weight: 500; }
+.card p { font-size: 26px; margin: 0; }
+.src { font-size: 20px; color: #a4abb6; margin-top: auto; }
+.shot { width: 100%; border: 1px solid #2b3d50; border-radius: 6px; }
+.st { display: inline-block; width: 30px; height: 30px; vertical-align: -4px; margin-right: 12px; }
+table { border-collapse: collapse; width: 100%; font-size: 26px; }
+td, th { text-align: left; padding: 16px 18px; border-bottom: 1px solid #2b3d50; vertical-align: top; }
+th { color: #a4abb6; font-weight: 500; font-size: 20px; letter-spacing: .1em; text-transform: uppercase; }
+td.w { font: 700 36px Roboto; color: #4dacff; width: 120px; }
+.tag { display: inline-block; font: 700 22px Roboto; padding: 4px 14px; border-radius: 4px; background: #5a3e8c; letter-spacing: .06em; }

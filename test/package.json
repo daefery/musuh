@@ -1,0 +1,7 @@
+{
+  "name": "musuh-browser-tests",
+  "private": true,
+  "type": "module",
+  "description": "Browser journeys for the MUSUH console. Uses an installed Chrome/Chromium (set CHROME=path if not found).",
+  "dependencies": { "playwright-core": "^1.56.0" }
+}

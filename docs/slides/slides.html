@@ -1,0 +1,116 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><title>MUSUH · slide</title><link rel="stylesheet" href="style.css"></head><body>
+<section class="slide">
+  <div class="kicker">Kartika Cyber Hackathon 2026 · Dukungan Teknologi</div>
+  <h1 style="font-size:132px;letter-spacing:.12em;margin-top:120px">MUSUH</h1>
+  <p class="big" style="margin:0">Mesin Uji Serangan dan Ketahanan</p>
+  <p style="max-width:1300px;margin-top:40px">Lawan tanding siber untuk setiap satuan TNI AD. Satu laptop, tanpa internet. Lawannya beradaptasi tetapi adil, nilainya bisa diperiksa ulang.</p>
+  <div class="foot"><span>Fery</span><span>1</span></div>
+</section>
+<section class="slide">
+  <div class="kicker">Masalah</div>
+  <h2>Latihan red vs blue butuh tiga tim</h2>
+  <div class="grid3">
+    <div class="card"><h3>Tim merah</h3><p>Penyerang terlatih yang mengeksploitasi Windows, menaikkan hak akses, mengincar direktori jaringan.</p></div>
+    <div class="card"><h3>Tim biru</h3><p>Analisis log, identifikasi indikator kompromi, isolasi jaringan, penghentian sistem terkendali.</p></div>
+    <div class="card"><h3>EXCON</h3><p>Menilai pencapaian sasaran latihan dengan standar GO/NO-GO.</p></div>
+  </div>
+  <p style="margin-top:44px">Karena butuh tiga tim, latihan seperti ini terikat pada acara besar: Keris Woomera, CYBEREX Super Garuda Shield, turnamen WMS.</p>
+  <p class="src">Sumber: Puspen TNI, "TNI–ADF Perkuat Pertahanan Siber melalui Simulasi Terpadu Keris Woomera 2026", korem072.tni-ad.mil.id, 17 Okt 2026</p>
+  <div class="foot"><span>MUSUH</span><span>2</span></div>
+</section>
+<section class="slide">
+  <div class="kicker">Arahan</div>
+  <h2>"Berlatih, berlatih, berlatih"</h2>
+  <table>
+    <tr><th>Arahan</th><th>Jawaban MUSUH</th></tr>
+    <tr><td>"TNI harus terus menyesuaikan diri, belajar, belajar, belajar, dan berlatih, berlatih, berlatih"</td><td>Latihan red vs blue bisa diulang di satuan kapan saja</td></tr>
+    <tr><td>"Sistem yang berlaku di TNI harus sistem prestasi, bukan sistem sekadar senioritas"</td><td>Nilai adil per prajurit yang bisa diperiksa ulang</td></tr>
+    <tr><td>"Kita harus mandiri ... teknologi, industri pertahanan"</td><td>Dibuat di Indonesia, satu berkas program, tanpa layanan luar negeri</td></tr>
+  </table>
+  <p class="src">Presiden Prabowo Subianto, amanat HUT ke-81 TNI, 5 Okt 2026 (detik.com); Praspa TNI-Polri, 22 Jul 2026 (antaranews.com)</p>
+  <div class="foot"><span>MUSUH</span><span>3</span></div>
+</section>
+<section class="slide">
+  <div class="kicker">Solusi</div>
+  <h2>Komputer menjadi tim merah dan EXCON</h2>
+  <div class="grid3">
+    <div class="card"><h3>Peserta</h3><p>Bertahan dari konsol: membaca peringatan dan log, mengisolasi host, memblokir alamat, mereset akun, memblokir Modbus.</p></div>
+    <div class="card"><h3>MUSUH</h3><p>Menyerang jaringan latihan. Bila satu jalan ditutup, memilih rute lain menurut graf serangan.</p></div>
+    <div class="card"><h3>Pelatih</h3><p>Memberi kode latihan, memantau, menandatangani rapor. Tampilan pelatih tercatat.</p></div>
+  </div>
+  <p style="margin-top:44px">Alur: <b>SIAPKAN</b> · <b>OPERASI</b> · <b>EVALUASI</b> · <b>RAPOR</b></p>
+  <div class="foot"><span>MUSUH</span><span>4</span></div>
+</section>
+
+<section class="slide">
+  <div class="kicker">Inovasi 1</div>
+  <h2>Musuh yang beradaptasi, tetapi adil</h2>
+  <div class="grid2 shotwide">
+    <div><ul>
+      <li>Peserta memblokir proksi 198.51.100.23. MUSUH membuka terowongan cadangan.</li>
+      <li>Peserta mereset akun admin. MUSUH memakai hash akun layanan untuk DCSync.</li>
+      <li>Keputusan dibuat perencana deterministik, bukan model bahasa.</li>
+      <li><b>Kode latihan sama + tindakan sama = musuh sama.</b> Dua prajurit bisa dibandingkan.</li></ul></div>
+    <img class="shot" src="shot-adapt.png" alt="Konsol OPERASI saat MUSUH beralih ke terowongan cadangan">
+  </div>
+  <div class="foot"><span>MUSUH</span><span>5</span></div>
+</section>
+<section class="slide">
+  <div class="kicker">Inovasi 2</div>
+  <h2>Nilai yang bisa diperiksa ulang</h2>
+  <div class="grid2 shotwide">
+    <div><ul>
+      <li>Rapor menyimpan kode, tindakan, mode dan sidik SHA-256.</li>
+      <li>Verifikasi memutar ulang seluruh latihan dari awal.</li>
+      <li>Berkas diubah di luar MUSUH menjadi 98: <b>RAPOR TIDAK SAH</b>, putar ulang menunjukkan nilai asli, walaupun sidiknya dihitung ulang. Konsol sendiri tidak bisa mengubah nilai.</li>
+      <li>Berhenti lebih awal tidak memberi GO: sisa waktu tetap dijalankan.</li></ul>
+      <p style="font-size:24px">Rapor membuktikan konsistensi nilai dengan rekaman tindakan. Identitas peserta dibuktikan tanda tangan pelatih.</p></div>
+    <img class="shot" src="shot-verify.png" alt="Verifikasi rapor yang diubah ditolak">
+  </div>
+  <div class="foot"><span>MUSUH</span><span>6</span></div>
+</section>
+<section class="slide">
+  <div class="kicker">Inovasi 3</div>
+  <h2>Rekaan, tetapi bersumber</h2>
+  <table>
+    <tr><th>Skenario</th><th>Dasar</th></tr>
+    <tr><td>Pengambilalihan direktori jaringan markas</td><td>Pola Red Team TNI di Keris Woomera 2026; teknik dari MITRE ATT&amp;CK G1017</td></tr>
+    <tr><td>Ransomware di pusat data satuan</td><td>Kronologi forensik BSSN atas PDNS 2 (Juni 2024); MITRE ATT&amp;CK S1202 LockBit 3.0</td></tr>
+    <tr><td>Serangan ke pasokan listrik markas</td><td>Ukraina 2015 (ATT&amp;CK C0028) dan FrostyGoop 2024 (C0041, Modbus)</td></tr>
+  </table>
+  <p style="margin-top:28px">40 kode teknik diperiksa di attack.mitre.org. 20 aturan deteksi meniru aturan SigmaHQ yang nyata. Alamat luar dari rentang dokumentasi RFC 5737.</p>
+  <div class="foot"><span>MUSUH</span><span>7</span></div>
+</section>
+<section class="slide">
+  <div class="kicker">Purwarupa</div>
+  <h2>Satu berkas program, tanpa internet</h2>
+  <div class="grid2 shotwide">
+    <div><ul>
+      <li><span class="mono">musuh.exe</span> (Windows) dan <span class="mono">musuh</span> (Linux), Rust, sekitar 2 MB.</li>
+      <li>Konsol bergaya TNI: peta jaringan, garis waktu, rantai serangan dan skor bergambar.</li>
+      <li>14 uji mesin dan 72 uji alur di peramban lulus pada tiga ukuran layar; diuji di Windows sungguhan.</li>
+      <li>Rapor dicek juga dari baris perintah: <span class="mono">musuh verify</span>.</li></ul></div>
+    <img class="shot" src="shot-ops.png" alt="Konsol OPERASI">
+  </div>
+  <div class="foot"><span>MUSUH</span><span>8</span></div>
+</section>
+<section class="slide">
+  <div class="kicker">Kelayakan dan langkah berikut</div>
+  <h2>Mulai dari satu satuan, satu minggu</h2>
+  <div class="grid3">
+    <div class="card"><h3>Uji coba</h3><p>Satu satuan, satu laptop, satu kode latihan. Bandingkan skor MUSUH dengan penilaian EXCON manusia.</p></div>
+    <div class="card"><h3>Pustaka skenario</h3><p>Pussiberad menyusun skenario dan kode latihan; tim MTT Siber meninggalkannya di satuan.</p></div>
+    <div class="card"><h3>Peta kelemahan</h3><p>Rapor terverifikasi dikumpulkan per teknik serangan, untuk menentukan prioritas pelatihan.</p></div>
+  </div>
+  <p style="margin-top:40px;font-size:26px">Usulan. Batasan dinyatakan terbuka: jaringan latihan adalah model, skenario rekaan, bobot nilai usulan perancang, belum diuji personel TNI AD.</p>
+  <div class="foot"><span>MUSUH</span><span>9</span></div>
+</section>
+<section class="slide">
+  <div class="kicker">Penutup</div>
+  <h1 style="margin-top:160px;max-width:1500px">Lawan tanding siber di setiap satuan.</h1>
+  <p class="big">Lawannya adil. Nilainya bisa diperiksa ulang.</p>
+  <p class="src">Tampilan memakai Astro UXDS (Rocket Communications, Inc.), tanpa dukungan resmi pemerintah AS. Huruf Roboto, SIL OFL 1.1.</p>
+  <div class="foot"><span>Fery</span><span>10</span></div>
+</section>
+
+</body></html>

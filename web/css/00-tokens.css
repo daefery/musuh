@@ -1,0 +1,38 @@
+/* MUSUH theme: TNI olive + gold, merah-putih accent. Status shapes follow the Astro UXDS status
+   symbols (critical triangle, serious diamond, caution square, normal circle, standby ring, off dot);
+   see /ASTRO-LICENSE.txt. Fonts: Roboto, Roboto Condensed, Roboto Mono (SIL OFL 1.1). */
+@font-face { font-family: Roboto; font-weight: 400; src: url(/fonts/roboto-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: Roboto; font-weight: 500; src: url(/fonts/roboto-latin-500-normal.woff2) format("woff2"); }
+@font-face { font-family: Roboto; font-weight: 700; src: url(/fonts/roboto-latin-700-normal.woff2) format("woff2"); }
+@font-face { font-family: "Roboto Condensed"; font-weight: 600; src: url(/fonts/roboto-condensed-latin-600-normal.woff2) format("woff2"); }
+@font-face { font-family: "Roboto Condensed"; font-weight: 700; src: url(/fonts/roboto-condensed-latin-700-normal.woff2) format("woff2"); }
+@font-face { font-family: "Roboto Mono"; font-weight: 400; src: url(/fonts/roboto-mono-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: "Roboto Mono"; font-weight: 500; src: url(/fonts/roboto-mono-latin-500-normal.woff2) format("woff2"); }
+:root {
+  --base: #0d120b; --base-hover: #161e12; --base-header: #121a0f; --base-selected: #2a2f14;
+  --surface: #151c12; --surface-hover: #1c2618; --surface-selected: #2a2f14; --surface-header: #1a2414;
+  --line: #2f3c28; --line-strong: #44563a;
+  --text: #ecefe2; --text-2: #c9d0bb; --text-3: #a3ad94; --text-inverse: #1a1405;
+  --gold: #d4a72c; --gold-2: #f0d27a; --olive: #4b5d2a; --olive-2: #6b803a;
+  --interactive: #d4a72c; --interactive-hover: #f0d27a; --interactive-muted: #6b803a;
+  --focus: #9fe0ea;
+  --critical: #e5484d; --serious: #f07a2a; --caution: #f2d03b; --normal: #46b85a; --standby: #4fb3bf; --off: #8a9478;
+  --merah: #d0342c; --putih: #f6f5ef;
+  --sans: Roboto, -apple-system, "Segoe UI", sans-serif; --head: "Roboto Condensed", Roboto, sans-serif; --mono: "Roboto Mono", ui-monospace, Consolas, monospace;
+  --r: 8px; --gsb-h: 64px; --scale: 1;
+}
+html.presentasi { --scale: 1.22; }
+* { box-sizing: border-box; }
+html { font-size: calc(16px * var(--scale)); margin: 0; height: 100%; background: var(--base); }
+body { margin: 0; height: 100%; color: var(--text); font-family: var(--sans); font-weight: 400; font-size: 0.875rem; line-height: 1.45;
+  background: var(--base) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='.03'%3E%3Cpath d='M-20 80c60-40 120 30 200-10s140 20 240-20'/%3E%3Cpath d='M-20 140c70-30 130 40 210 0s130 30 230-10'/%3E%3Cpath d='M-20 220c50-50 140 20 220-20s120 40 220 0'/%3E%3Cpath d='M-20 300c80-30 120 30 200 0s150 20 240-30'/%3E%3Cpath d='M-20 360c60-20 140 30 220-10s130 10 220-10'/%3E%3C/g%3E%3C/svg%3E"); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+h1, h2, h3, h4, .head { font-family: var(--head); }
+.mono { font-family: var(--mono); }
+.dim { color: var(--text-3); }
+.small { font-size: 0.8125rem; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+svg.i { width: 1.125rem; height: 1.125rem; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.st { width: 0.75rem; height: 0.75rem; flex: none; display: inline-block; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }

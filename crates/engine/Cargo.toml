@@ -1,0 +1,11 @@
+[package]
+name = "musuh-engine"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "MUSUH exercise engine: deterministic adaptive opposing force, detection, scoring, replay verification. No IO, no clock."
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
