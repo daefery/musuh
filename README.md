@@ -23,6 +23,7 @@ Memeriksa rapor dari baris perintah: `musuh.exe verify rapor\NAMA-BERKAS.json` (
 | [Proposal](docs/PROPOSAL.md) | Masalah, solusi, kebaruan, kesesuaian dengan kriteria penilaian |
 | [Panduan operasi](docs/RUNBOOK.md) | Cara pelatih dan peserta memakai MUSUH |
 | [Naskah demo](docs/DEMO-SCRIPT.md) | Alur presentasi 10 menit |
+| [Naskah video](docs/VIDEO-SCRIPT.md) | Narasi video 2 menit 22 detik, per adegan |
 | [Batasan](docs/LIMITS.md) | Yang tidak dilakukan MUSUH, dinyatakan terbuka |
 | [Sumber](docs/SOURCES.md) | Asal setiap isi skenario, teknik dan aturan deteksi |
 | [Riset skenario](docs/RESEARCH-SCENARIOS.md) | Riset insiden nyata yang menjadi dasar skenario |
