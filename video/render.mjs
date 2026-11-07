@@ -1,6 +1,6 @@
-// Builds the MUSUH demo video with voice-over and burned-in subtitles.
+// Builds the MUSUH demo video: English voice-over, Indonesian subtitles burned in (+ .srt).
 //   1. node video/capture.mjs     stills from the real program (+ element boxes)
-//   2. python video/tts.py        narration per sentence (+ word timings)
+//   2. python video/tts.py        English narration per sentence (Kokoro, local)
 //   3. node video/render.mjs      timeline -> frames (stage.html) -> MP4 + SRT
 // Output: video/out/MUSUH-demo.mp4, video/out/MUSUH-demo.srt
 import fs from 'node:fs'; import path from 'node:path'; import { execFileSync, spawn } from 'node:child_process';
@@ -19,6 +19,7 @@ for (const sc of N.scenes) {
   const t0 = t; t += LEAD; const starts = [];
   sc.lines.forEach((line, i) => {
     const v = VO[`${sc.id}-${i}`]; starts.push(t); clips.push([`${sc.id}-${i}`, t]);
+    line = line.id; // English is spoken, the Indonesian line is the subtitle
     // subtitles: split at commas/colons into chunks of <= 58 chars, timed by character share
     // whole line when it fits (<= 64 chars), else break at sentence ends, then commas/colons, then length
     // Balanced chunks of <= 64 chars: n = ceil(len/60) pieces, each break placed at the word gap
@@ -41,7 +42,14 @@ for (const sc of N.scenes) {
   });
   t += (TAIL[sc.id] ?? TAIL.default) - GAP;
   scenes.push({ id: sc.id, title: sc.title, step: STEP[sc.id] ?? null, t0, t1: t });
-  (PL[sc.id] || []).forEach((b, k) => beats.push({ ...b, scene: sc.id, t: k === 0 ? t0 : starts[b.s] + (b.o || 0) }));
+  // beat time: scene start (first beat), or a spoken word (b.w, 0.2 s before it), or sentence start + b.o
+  const at = (b) => {
+    if (b.w) { const ws = VO[`${sc.id}-${b.s}`].words || [], hit = ws.find(([w]) => w.startsWith(b.w));
+      if (hit) return starts[b.s] + Math.max(0, hit[1] - 0.2);
+      console.warn('  cue word not heard:', sc.id, b.s, b.w, ws.map(x => x[0]).join(' ')); }
+    return starts[b.s] + (b.o || 0);
+  };
+  (PL[sc.id] || []).forEach((b, k) => beats.push({ ...b, scene: sc.id, t: k === 0 ? t0 : at(b) }));
 }
 beats.sort((a, b) => a.t - b.t);
 const total = Math.ceil(t * FPS) / FPS;

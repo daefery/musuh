@@ -120,7 +120,7 @@ window.seek = (t) => {
     if (b.stamp) { const o = ease(clamp((dt - 0.3) / 0.3, 0, 1)), r = toScreen(c, boxes.out || [700, 400, 400, 200]);
       html += `<div class="stamp ${b.stamp.tone}" style="left:${Math.max(40, r[0] - 600)}px;top:${r[1] + 30}px;opacity:${o};transform:rotate(-8deg) scale(${1.5 - .5 * o})">${b.stamp.text}${b.stamp.sub ? `<div style="font:600 30px/1.2 Roboto;letter-spacing:0;margin-top:10px;color:#fff">${b.stamp.sub}</div>` : ""}</div>`; }
     if (b.edit) { const o = ease(clamp(dt / 0.4, 0, 1)), typed = clamp((dt - 1.2) / 0.6, 0, 1);
-      const val = typed < 0.5 ? b.edit.from : b.edit.to;
+      const val = typed < 0.5 ? b.edit.from : b.edit.to; // typing starts 1.2 s after the beat: the beat sits ~1.4 s before "98" is spoken
       html += `<div style="position:absolute;inset:0;background:rgba(5,8,4,${.75 * o})"></div>
         <div style="position:absolute;left:460px;top:250px;width:1000px;opacity:${o};background:#f4f1e6;color:#222;border-radius:10px;box-shadow:0 30px 80px rgba(0,0,0,.7);overflow:hidden">
           <div style="background:#d8d3c2;padding:10px 18px;font:500 22px Roboto">rapor-diubah.json — Notepad</div>
