@@ -1,8 +1,20 @@
 /target
 /rapor
 /test/shots
-/dist
+
 *.tmp
 /test/node_modules
 /video/out
 /video/models
+
+# Working materials, kept locally, not part of the public submission repo
+/council/
+/design/
+/video/
+/docs/PROPOSAL.md
+/docs/DEMO-SCRIPT.md
+/docs/VIDEO-SCRIPT.md
+/docs/RESEARCH-SCENARIOS.md
+/docs/REVIEW-LOG.md
+/docs/slides/*
+!/docs/slides/MUSUH-slides.pdf

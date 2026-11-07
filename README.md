@@ -5,10 +5,10 @@ MUSUH menyerang jaringan latihan di dalam laptop, berganti jalur bila satu jalan
 
 Karya untuk **Kartika Cyber Hackathon 2026**, kategori 03 Dukungan Teknologi.
 
-![Konsol OPERASI](docs/slides/crop-ops.png)
+![Konsol OPERASI](docs/img/operasi.png)
 
 ## Mencoba dalam 1 menit (Windows)
-1. Unduh `musuh.exe` dari halaman **Releases** repositori ini.
+1. Unduh `musuh.exe`: ada di folder [`dist/`](dist/) repositori ini (klik berkasnya, lalu **Download raw file**) atau di halaman **Releases**.
 2. Klik dua kali `musuh.exe`. Peramban terbuka ke `http://127.0.0.1:8090/`.
 3. Bila Windows menampilkan **"Windows protected your PC"**: klik **More info**, lalu **Run anyway**. Peringatan ini muncul karena program belum ditandatangani sertifikat digital; program tidak memakai internet dan hanya membuka port lokal 127.0.0.1.
 4. SIAPKAN: isi nama, pilih skenario, tekan **Mulai latihan**.
@@ -20,15 +20,10 @@ Memeriksa rapor dari baris perintah: `musuh.exe verify rapor\NAMA-BERKAS.json` (
 ## Dokumen
 | Dokumen | Isi |
 |---|---|
-| [Proposal](docs/PROPOSAL.md) | Masalah, solusi, kebaruan, kesesuaian dengan kriteria penilaian |
 | [Panduan operasi](docs/RUNBOOK.md) | Cara pelatih dan peserta memakai MUSUH |
-| [Naskah demo](docs/DEMO-SCRIPT.md) | Alur presentasi 10 menit |
-| [Naskah video](docs/VIDEO-SCRIPT.md) | Narasi video 2 menit 33 detik (suara Inggris, subtitle Indonesia); cara membuat video ada di `video/` |
 | [Batasan](docs/LIMITS.md) | Yang tidak dilakukan MUSUH, dinyatakan terbuka |
 | [Sumber](docs/SOURCES.md) | Asal setiap isi skenario, teknik dan aturan deteksi |
-| [Riset skenario](docs/RESEARCH-SCENARIOS.md) | Riset insiden nyata yang menjadi dasar skenario |
 | [Arsitektur](docs/ARCHITECTURE.md) | Mesin, server lokal, konsol, pengujian (English) |
-| [Catatan review](docs/REVIEW-LOG.md) | Ringkasan review independen; rincian di `council/` |
 | [Slide](docs/slides/MUSUH-slides.pdf) | 10 slide presentasi |
 
 ## Membangun dari kode sumber
@@ -51,7 +46,7 @@ node test/layout.mjs target/release/musuh           # pilih peringatan, tindakan
 - `crates/engine`: mesin latihan murni (tanpa IO, tanpa jam): skenario, musuh deterministik, deteksi, nilai, rapor, verifikasi.
 - `crates/app`: program `musuh`: server lokal 127.0.0.1, jam latihan, penyimpanan rapor, perintah `verify`.
 - `web`: konsol (HTML, CSS, JavaScript) yang ditanam di dalam program.
-- `test`: uji peramban. `council`: catatan review independen. `docs`: dokumen dan slide.
+- `test`: uji peramban. `docs`: dokumen dan slide. `dist`: `musuh.exe` siap pakai (sidik SHA-256 di `SHA256SUMS.txt`).
 
 ## Lisensi dan atribusi
 Kode: MIT, lihat `LICENSE`. Bentuk simbol status mengikuti Astro UXDS (c) Rocket Communications, Inc. (`web/ASTRO-LICENSE.txt`); tidak ada dukungan dari pemerintah AS. Huruf Roboto, Roboto Condensed dan Roboto Mono: SIL Open Font License 1.1.
