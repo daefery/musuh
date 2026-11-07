@@ -5,7 +5,7 @@ MUSUH menyerang jaringan latihan di dalam laptop, berganti jalur bila satu jalan
 
 Karya untuk **Kartika Cyber Hackathon 2026**, kategori 03 Dukungan Teknologi.
 
-![Konsol OPERASI](docs/slides/shot-ops.png)
+![Konsol OPERASI](docs/slides/crop-ops.png)
 
 ## Mencoba dalam 1 menit (Windows)
 1. Unduh `musuh.exe` dari halaman **Releases** repositori ini.

@@ -1,70 +1,66 @@
 <section class="slide">
-  <div class="kicker">Inovasi 1</div>
-  <h2>Musuh yang beradaptasi, tetapi adil</h2>
-  <div class="grid2 shotwide">
-    <div><ul>
-      <li>Peserta memblokir proksi 198.51.100.23. MUSUH membuka terowongan cadangan.</li>
-      <li>Peserta mereset akun admin. MUSUH memakai hash akun layanan untuk DCSync.</li>
-      <li>Keputusan dibuat perencana deterministik, bukan model bahasa.</li>
-      <li><b>Kode latihan sama + tindakan sama = musuh sama.</b> Dua prajurit bisa dibandingkan.</li></ul></div>
-    <img class="shot" src="shot-adapt.png" alt="Konsol OPERASI saat MUSUH beralih ke terowongan cadangan">
-  </div>
-  <div class="foot"><span>MUSUH</span><span>5</span></div>
-</section>
-<section class="slide">
   <div class="kicker">Inovasi 2</div>
-  <h2>Nilai yang bisa diperiksa ulang</h2>
-  <div class="grid2 shotwide">
+  <h2>Nilai yang <span class="gold">bisa diperiksa ulang</span></h2>
+  <div class="grid2" style="grid-template-columns:1.15fr .85fr;align-items:start">
     <div><ul>
-      <li>Rapor menyimpan kode, tindakan, mode dan sidik SHA-256.</li>
-      <li>Verifikasi memutar ulang seluruh latihan dari awal.</li>
-      <li>Berkas diubah di luar MUSUH menjadi 98: <b>RAPOR TIDAK SAH</b>, putar ulang menunjukkan nilai asli, walaupun sidiknya dihitung ulang. Konsol sendiri tidak bisa mengubah nilai.</li>
-      <li>Berhenti lebih awal tidak memberi GO: sisa waktu tetap dijalankan.</li></ul>
-      <p style="font-size:24px">Rapor membuktikan konsistensi nilai dengan rekaman tindakan. Identitas peserta dibuktikan tanda tangan pelatih.</p></div>
-    <img class="shot" src="shot-verify.png" alt="Verifikasi rapor yang diubah ditolak">
+      <li>Rapor menyimpan kode latihan, tindakan, mode dan sidik SHA-256.</li>
+      <li>Verifikasi memutar ulang seluruh latihan dari awal, lalu membandingkan nilai dan sidik.</li>
+      <li>Berkas diubah di luar MUSUH menjadi 98: <b>RAPOR TIDAK SAH</b>. Putar ulang menunjukkan nilai asli, walaupun sidiknya dihitung ulang.</li>
+      <li>Konsol sendiri tidak bisa mengubah nilai. Berhenti lebih awal tidak memberi GO: sisa waktu tetap dijalankan.</li></ul>
+      <p class="caution">Rapor membuktikan konsistensi nilai dengan rekaman tindakan. Identitas peserta dibuktikan tanda tangan pelatih, bukan berkas.</p></div>
+    <div><img class="shot" src="crop-verify.png" alt="Verifikasi: berkas yang diubah ditolak, putar ulang memberi nilai asli" style="max-height:660px;width:auto;margin:0 auto"><p class="cap" style="text-align:center"><b>Berkas diubah ke 98</b> → TIDAK SAH, nilai asli 90</p></div>
   </div>
-  <div class="foot"><span>MUSUH</span><span>6</span></div>
+  <div class="foot"><span>Inovasi 2</span><b>MUSUH</b><span>6</span></div>
 </section>
 <section class="slide">
   <div class="kicker">Inovasi 3</div>
-  <h2>Rekaan, tetapi bersumber</h2>
+  <h2>Rekaan, tetapi <span class="gold">bersumber</span></h2>
   <table>
     <tr><th>Skenario</th><th>Dasar</th></tr>
-    <tr><td>Pengambilalihan direktori jaringan markas</td><td>Pola Red Team TNI di Keris Woomera 2026; teknik dari MITRE ATT&amp;CK G1017</td></tr>
-    <tr><td>Ransomware di pusat data satuan</td><td>Kronologi forensik BSSN atas PDNS 2 (Juni 2024); MITRE ATT&amp;CK S1202 LockBit 3.0</td></tr>
-    <tr><td>Serangan ke pasokan listrik markas</td><td>Ukraina 2015 (ATT&amp;CK C0028) dan FrostyGoop 2024 (C0041, Modbus)</td></tr>
+    <tr><td><b>Pengambilalihan direktori jaringan markas</b><br>IT · 8 tahap · 11 rute</td><td>Pola Red Team TNI di Keris Woomera 2026; teknik dari MITRE ATT&amp;CK G1017 (Volt Typhoon)</td></tr>
+    <tr><td><b>Ransomware di pusat data satuan</b><br>IT · 6 tahap · 9 rute</td><td>Kronologi forensik BSSN atas PDNS 2 (Juni 2024); MITRE ATT&amp;CK S1202 LockBit 3.0</td></tr>
+    <tr><td><b>Serangan ke pasokan listrik markas</b><br>IT + OT · 6 tahap · 8 rute</td><td>Ukraina 2015 (ATT&amp;CK C0028) dan FrostyGoop 2024 (C0041, Modbus)</td></tr>
   </table>
-  <p style="margin-top:28px">40 kode teknik diperiksa di attack.mitre.org. 20 aturan deteksi meniru aturan SigmaHQ yang nyata. Alamat luar dari rentang dokumentasi RFC 5737.</p>
-  <div class="foot"><span>MUSUH</span><span>7</span></div>
+  <div class="kv">
+    <div><b>40</b><span>kode teknik diperiksa di attack.mitre.org</span></div>
+    <div><b>20</b><span>aturan deteksi meniru aturan SigmaHQ yang nyata, dengan tautan</span></div>
+    <div><b>3</b><span>aturan OT buatan MUSUH, dilabeli "bukan SigmaHQ"</span></div>
+    <div><b>RFC 5737</b><span>alamat luar hanya dari rentang dokumentasi</span></div>
+  </div>
+  <div class="foot"><span>Inovasi 3</span><b>MUSUH</b><span>7</span></div>
 </section>
 <section class="slide">
   <div class="kicker">Purwarupa</div>
-  <h2>Satu berkas program, tanpa internet</h2>
-  <div class="grid2 shotwide">
+  <h2>Satu berkas program, <span class="gold">tanpa internet</span></h2>
+  <div class="grid2 shotwide" style="grid-template-columns:.62fr 1.38fr">
     <div><ul>
-      <li><span class="mono">musuh.exe</span> (Windows) dan <span class="mono">musuh</span> (Linux), Rust, sekitar 2 MB.</li>
-      <li>Konsol bergaya TNI: peta jaringan, garis waktu, rantai serangan dan skor bergambar.</li>
-      <li>14 uji mesin dan 72 uji alur di peramban lulus pada tiga ukuran layar; diuji di Windows sungguhan.</li>
+      <li><span class="mono">musuh.exe</span> (Windows) dan <span class="mono">musuh</span> (Linux), Rust, sekitar 2 MB. Klik dua kali, peramban terbuka.</li>
+      <li>Konsol: peta jaringan, garis waktu, antrean peringatan, log telemetri, layar pelatih.</li>
+      <li>14 uji mesin dan 74 pemeriksaan alur di peramban lulus pada tiga ukuran layar; diuji di Windows sungguhan.</li>
       <li>Rapor dicek juga dari baris perintah: <span class="mono">musuh verify</span>.</li></ul></div>
-    <img class="shot" src="shot-ops.png" alt="Konsol OPERASI">
+    <div><img class="shot" src="crop-ops.png" alt="Konsol OPERASI"><p class="cap"><b>OPERASI:</b> peta jaringan (kiri), antrean peringatan dengan tautan aturan SigmaHQ (tengah), detail aset dan tindakan (kanan)</p></div>
   </div>
-  <div class="foot"><span>MUSUH</span><span>8</span></div>
+  <div class="foot"><span>Purwarupa</span><b>MUSUH</b><span>8</span></div>
 </section>
 <section class="slide">
   <div class="kicker">Kelayakan dan langkah berikut</div>
-  <h2>Mulai dari satu satuan, satu minggu</h2>
+  <h2>Mulai dari <span class="gold">satu satuan, satu minggu</span></h2>
   <div class="grid3">
     <div class="card"><h3>Uji coba</h3><p>Satu satuan, satu laptop, satu kode latihan. Bandingkan skor MUSUH dengan penilaian EXCON manusia.</p></div>
     <div class="card"><h3>Pustaka skenario</h3><p>Pussiberad menyusun skenario dan kode latihan; tim MTT Siber meninggalkannya di satuan.</p></div>
     <div class="card"><h3>Peta kelemahan</h3><p>Rapor terverifikasi dikumpulkan per teknik serangan, untuk menentukan prioritas pelatihan.</p></div>
   </div>
-  <p style="margin-top:40px;font-size:26px">Usulan. Batasan dinyatakan terbuka: jaringan latihan adalah model, skenario rekaan, bobot nilai usulan perancang, belum diuji personel TNI AD.</p>
-  <div class="foot"><span>MUSUH</span><span>9</span></div>
+  <div class="grid2" style="margin-top:40px;align-items:center;flex:0">
+    <p class="caution" style="margin:0">Usulan. Batasan dinyatakan terbuka: jaringan latihan adalah model, skenario rekaan, bobot nilai usulan perancang, belum diuji personel TNI AD.</p>
+    <div><img class="shot" src="crop-genset.png" alt="Skenario OT: menyalakan genset ditolak sampai tulis Modbus diblokir" style="max-width:640px;margin:0 auto"><p class="cap" style="text-align:center"><b>IT + OT:</b> genset tidak bisa dinyalakan sebelum tulis Modbus diblokir</p></div>
+  </div>
+  <div class="foot"><span>Kelayakan</span><b>MUSUH</b><span>9</span></div>
 </section>
 <section class="slide">
   <div class="kicker">Penutup</div>
-  <h1 style="margin-top:160px;max-width:1500px">Lawan tanding siber di setiap satuan.</h1>
+  <h1 style="margin-top:150px;max-width:1500px">Lawan tanding siber di <span class="gold">setiap satuan.</span></h1>
   <p class="big">Lawannya adil. Nilainya bisa diperiksa ulang.</p>
-  <p class="src">Tampilan memakai Astro UXDS (Rocket Communications, Inc.), tanpa dukungan resmi pemerintah AS. Huruf Roboto, SIL OFL 1.1.</p>
-  <div class="foot"><span>Fery</span><span>10</span></div>
+  <p style="font-family:'Roboto Mono',monospace;color:var(--gold-2);font-size:30px;margin-top:40px">github.com/daefery/musuh</p>
+  <p class="src">Simbol status mengikuti Astro UXDS (Rocket Communications, Inc.), tanpa dukungan resmi pemerintah AS. Huruf Roboto, SIL OFL 1.1.</p>
+  <div class="foot"><span>Fery</span><b>MUSUH</b><span>10</span></div>
 </section>
