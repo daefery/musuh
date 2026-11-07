@@ -1,19 +1,32 @@
-# MUSUH · Mesin Uji Serangan dan Ketahanan
+<h1 align="center">MUSUH · Mesin Uji Serangan dan Ketahanan</h1>
 
-Lawan tanding siber untuk satuan TNI AD. Satu laptop, tanpa internet.
-MUSUH menyerang jaringan latihan di dalam laptop, berganti jalur bila satu jalan diblokir, menilai peserta GO/NO-GO, lalu menerbitkan Rapor Prestasi Siber yang bisa diperiksa ulang dengan memutar ulang latihannya.
+<p align="center">
+  <b>Lawan tanding siber untuk satuan TNI AD. Satu laptop, tanpa internet.</b><br>
+  MUSUH menyerang jaringan latihan di dalam laptop, berganti jalur bila satu jalan diblokir, menilai peserta GO/NO-GO, lalu menerbitkan Rapor Prestasi Siber yang bisa diperiksa ulang dengan memutar ulang latihannya.
+</p>
 
-Karya untuk **Kartika Cyber Hackathon 2026**, kategori 03 Dukungan Teknologi.
+<p align="center">
+  <a href="https://github.com/daefery/musuh/releases/latest/download/musuh.exe"><img alt="Unduh musuh.exe untuk Windows" src="https://img.shields.io/badge/Unduh-musuh.exe%20(Windows)-D4A72C?style=for-the-badge&logo=windows&logoColor=1A1405&labelColor=D4A72C&color=4B5D2A"></a>
+  <a href="https://github.com/daefery/musuh/releases/latest/download/musuh-linux"><img alt="Unduh musuh untuk Linux" src="https://img.shields.io/badge/Unduh-musuh%20(Linux)-4B5D2A?style=for-the-badge&logo=linux&logoColor=F0D27A"></a>
+  <a href="docs/slides/MUSUH-slides.pdf"><img alt="Slide presentasi (PDF)" src="https://img.shields.io/badge/Slide-PDF-4B5D2A?style=for-the-badge&logoColor=F0D27A"></a>
+</p>
+
+<p align="center">
+  <img alt="Kartika Cyber Hackathon 2026" src="https://img.shields.io/badge/Kartika%20Cyber%20Hackathon%202026-Dukungan%20Teknologi-4B5D2A">
+  <a href="LICENSE"><img alt="Lisensi MIT" src="https://img.shields.io/badge/lisensi-MIT-4B5D2A"></a>
+  <img alt="Windows dan Linux" src="https://img.shields.io/badge/platform-Windows%20%7C%20Linux-4B5D2A">
+  <img alt="Rust, 2 MB, tanpa internet" src="https://img.shields.io/badge/Rust-2%20MB%20%C2%B7%20tanpa%20internet-D4A72C?labelColor=4B5D2A">
+</p>
 
 ![Konsol OPERASI](docs/img/operasi.png)
 
 ## Mencoba dalam 1 menit (Windows)
-1. Unduh `musuh.exe`: ada di folder [`dist/`](dist/) repositori ini (klik berkasnya, lalu **Download raw file**) atau di halaman **Releases**.
+1. Unduh **[musuh.exe](https://github.com/daefery/musuh/releases/latest/download/musuh.exe)** (2 MB). Salinannya juga ada di folder [`dist/`](dist/) dan di halaman [Releases](https://github.com/daefery/musuh/releases).
 2. Klik dua kali `musuh.exe`. Peramban terbuka ke `http://127.0.0.1:8090/`.
 3. Bila Windows menampilkan **"Windows protected your PC"**: klik **More info**, lalu **Run anyway**. Peringatan ini muncul karena program belum ditandatangani sertifikat digital; program tidak memakai internet dan hanya membuka port lokal 127.0.0.1.
 4. SIAPKAN: isi nama, pilih skenario, tekan **Mulai latihan**.
 
-Linux: unduh `musuh-linux`, jalankan `chmod +x musuh-linux && ./musuh-linux`.
+Linux: unduh **[musuh-linux](https://github.com/daefery/musuh/releases/latest/download/musuh-linux)**, jalankan `chmod +x musuh-linux && ./musuh-linux`.
 
 Memeriksa rapor dari baris perintah: `musuh.exe verify rapor\NAMA-BERKAS.json` (keluar 0 = SAH, 1 = TIDAK SAH).
 
