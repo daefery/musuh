@@ -30,14 +30,15 @@ Linux: unduh **[musuh-linux](https://github.com/daefery/musuh/releases/latest/do
 
 Memeriksa rapor dari baris perintah: `musuh.exe verify rapor\NAMA-BERKAS.json` (keluar 0 = SAH, 1 = TIDAK SAH).
 
-## Dokumen
+## Dokumentasi teknis
 | Dokumen | Isi |
 |---|---|
-| [Panduan operasi](docs/RUNBOOK.md) | Cara pelatih dan peserta memakai MUSUH |
+| [Arsitektur sistem](docs/ARCHITECTURE.md) | Mesin, server lokal, konsol, format rapor, pengujian (English) |
+| Panduan instalasi | Bagian [Mencoba dalam 1 menit](#mencoba-dalam-1-menit-windows) dan [Membangun dari kode sumber](#membangun-dari-kode-sumber) di halaman ini |
+| [Cara penggunaan](docs/RUNBOOK.md) | Panduan operasi untuk pelatih dan peserta, dari SIAPKAN sampai RAPOR |
 | [Batasan](docs/LIMITS.md) | Yang tidak dilakukan MUSUH, dinyatakan terbuka |
-| [Sumber](docs/SOURCES.md) | Asal setiap isi skenario, teknik dan aturan deteksi |
-| [Arsitektur](docs/ARCHITECTURE.md) | Mesin, server lokal, konsol, pengujian (English) |
-| [Slide](docs/slides/MUSUH-slides.pdf) | 10 slide presentasi |
+| [Sumber](docs/SOURCES.md) | Asal setiap isi skenario, teknik dan aturan deteksi; atribusi pihak ketiga |
+| [Slide presentasi](docs/slides/MUSUH-slides.pdf) | 10 slide: latar belakang, solusi, teknologi, potensi implementasi |
 
 ## Membangun dari kode sumber
 Butuh Rust 1.80 atau lebih baru.
