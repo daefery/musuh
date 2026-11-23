@@ -38,7 +38,7 @@ Memeriksa rapor dari baris perintah: `musuh.exe verify rapor\NAMA-BERKAS.json` (
 | [Cara penggunaan](docs/RUNBOOK.md) | Panduan operasi untuk pelatih dan peserta, dari SIAPKAN sampai RAPOR |
 | [Batasan](docs/LIMITS.md) | Yang tidak dilakukan MUSUH, dinyatakan terbuka |
 | [Sumber](docs/SOURCES.md) | Asal setiap isi skenario, teknik dan aturan deteksi; atribusi pihak ketiga |
-| [Slide presentasi](docs/slides/MUSUH-slides.pdf) | 10 slide: latar belakang, solusi, teknologi, potensi implementasi |
+| [Slide presentasi](docs/slides/MUSUH-slides.pdf) | 11 slide: latar belakang, solusi, teknologi, potensi implementasi, rencana pengembangan |
 
 ## Membangun dari kode sumber
 Butuh Rust 1.80 atau lebih baru.
